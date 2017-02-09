@@ -1,1 +1,1 @@
-# Hankszhang.github.io
+# Hanks's personal blog based on [Hexo](https://hexo.io/)
