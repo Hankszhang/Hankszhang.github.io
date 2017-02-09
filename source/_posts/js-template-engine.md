@@ -258,7 +258,7 @@ console.log(TemplateEngine(template, {
     showSkills: true
 }));
 ```
-我对代码做了一些细小的优化，[最终版](../demo/TemplateEngine.js)如下所示：
+我对代码做了一些细小的优化，[最终版](/assets/demo/TemplateEngine.js)如下所示：
 ```js
 var TemplateEngine = function(html, options) {
     var re = /<%([^%>]+)?%>/g, reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g, code = 'var r=[];\n', cursor = 0, match;
