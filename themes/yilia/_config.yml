@@ -45,9 +45,9 @@ open_in_new: false
 # 打赏基础设定：0-关闭打赏； 1-文章对应的md文件里有reward:true属性，才有打赏； 2-所有文章均有打赏
 reward_type: 1
 # 打赏wording
-reward_wording: '谢谢你请我喝咖啡'
+reward_wording: '谢谢'
 # 支付宝二维码图片地址，跟你设置头像的方式一样。比如：/assets/img/alipay.jpg
-alipay: /assets/img/alipay.jpg
+alipay: /assets/img/alipay.png
 # 微信二维码图片地址
 weixin: /assets/img/wechat.png
 
@@ -72,9 +72,9 @@ duoshuo: false
 # 样式定制 - 一般不需要修改，除非有很强的定制欲望…
 style:
   # 头像上面的背景颜色
-  header: '#4d4d4d'
+  header: '#005a87'
   # 右滑板块背景
-  slider: 'linear-gradient(200deg,#a0cfe4,#e8c37e)'
+  slider: 'linear-gradient(200deg,#005a87,#656D78)'
 
 # slider的设置
 slider:
