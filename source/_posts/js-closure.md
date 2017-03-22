@@ -9,7 +9,7 @@ tags: [技术, JS, 前端]
 ## 主要内容
 
 1. 闭包是什么，如何工作？ - 闭包的几个重要概念
-2. 使用闭包
+2. 闭包的使用
     - 私有变量
     - 函数回调与计数器
     - 绑定函数上下文
@@ -64,12 +64,12 @@ function outerFunction() {
         console.log(outer);
         console.log(inner);
         console.log(param);
-        console.log(toolate);
+        console.log(tooLate);
     }
     later = innerFunction;
 };
-console.log(toolate); // undefined
-var toolate = 'comming'; 
+console.log(tooLate); // undefined
+var tooLate = 'comming'; 
 
 outerFunction();
 later('pass');      // outerman
@@ -77,7 +77,7 @@ later('pass');      // outerman
                     // post
                     // comming
 ```
-执行上面的代码后，四个变量均会输出相应的值，即使是在内部函数声明之后声明的变量toolate也能在内部函数被访问到。
+执行上面的代码后，四个变量均会输出相应的值，即使是在内部函数声明之后声明的变量tooLate也能在内部函数被访问到。
 
 这个结果可以总结出闭包的三个核心原则：
 - 内部函数的参数是包含在闭包中的。
@@ -88,8 +88,32 @@ later('pass');      // outerman
 
 接下来，我们总结下在实际开发过程中使用闭包的常见情况。
 
-未完待续。。。
+## 闭包的使用
 
+### 私有变量
+
+将某些变量封装为“私有变量”是一种使用闭包的常见方法。通常的做法是在构造器内隐藏变量，使其在外部作用域不可访问，但是可以存在于内部方法的闭包内。
+如下面的例子：
+```js
+function Ninja () {
+    var feints = 0;
+    this.getFeints = function () {
+        return feints;
+    };
+    
+    this.feint = function () {
+        feints++;
+    }
+    
+    var ninja = new Ninja();
+    ninja.feint();
+    
+    console.log(ninja.getFeints()); // 1
+    console.log(ninja.feints);  // undefined
+}
+```
+上面的代码中，构造器内部的变量feints只能在构造器内被访问，要从外部访问到该变量，我们可以通过getFeints()对其进行访问，通过feint()方法对其进行修改。
+从输出结果可以看出，feints变量是ninja的“私有变量”，其作用域只在内部可见。
 
 
 
