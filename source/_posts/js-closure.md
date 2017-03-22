@@ -115,9 +115,33 @@ function Ninja () {
 上面的代码中，构造器内部的变量feints只能在构造器内被访问，要从外部访问到该变量，我们可以通过getFeints()对其进行访问，通过feint()方法对其进行修改。
 从输出结果可以看出，feints变量是ninja的“私有变量”，其作用域只在内部可见。
 
+### 回调
+在使用回调时，回调函数都是在后期未指定的时间进行异步调用，而在回调函数内部经常需要访问外部数据。闭包正是这种数据访问方式的直观体现，因为它可以使我们不用创建全局变量来保存这些外部数据。
+见下面的例子：
 
+```js
+function animateIt(elementId) {
+    var elem = document.getElementById(elementId);
+    var tick = 0;
 
+    var timer = setInterval(function(){                         
+        if (tick < 100) {
+            elem.style.left = elem.style.top = tick + 'px';
+            tick++;
+        }
+        else {
+            clearInterval(timer);
+            // 这三个变量都可以在回调用被访问到
+            console.log(tick);  // 100
+            console.log(elem);
+            console.log(timer);
+        }
+    }, 10);
+}
 
+animateIt('box');
+```
+通过在函数内部定义变量，并依赖闭包，可以使得这些变量在计时器回调函数中被访问到，每次执行animateIt()函数时都会有其私有的闭包，这样就可以不会污染全局作用域。
 
 
 
