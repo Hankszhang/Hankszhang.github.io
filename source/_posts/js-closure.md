@@ -11,7 +11,7 @@ tags: [技术, JS, 前端]
 1. 闭包是什么，如何工作？ - 闭包的几个重要概念
 2. 闭包的使用
     - 私有变量
-    - 函数回调与计数器
+    - 函数回调
     - 绑定函数上下文
     - 偏应用函数
     - 函数重载
@@ -143,6 +143,21 @@ animateIt('box');
 ```
 通过在函数内部定义变量，并依赖闭包，可以使得这些变量在计时器回调函数中被访问到，每次执行animateIt()函数时都会有其私有的闭包，这样就可以不会污染全局作用域。
 需要注意的是，闭包不是在创建那一时刻的状态的快照，而是一个真实的状态封装，只要闭包存在，其内部的变量就能够被更新。
+
+### 绑定函数上下文
+
+大家可能有听过或使用过bind()函数，bind函数的作用是将某个函数绑定到特定的对象上，并返回一个匿名函数，从而强制将函数的上下文设置为我们想要的任何对象。
+我们来看下Prototype库中实现bind函数的示例：
+```js
+Function.prototype.bind = function () {
+    var fn = this,
+    var args = Array.prototype.slice.call(arguments);
+    var object = args.shift();
+    return function () {
+        return fn.apply(object, args.concat(Array.prototype.slice.call(arguments)));
+    };
+};
+```
 
 
 
