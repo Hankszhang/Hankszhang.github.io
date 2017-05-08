@@ -51,8 +51,10 @@ directives: {
 这里为了与Vhtml的组件定义形式保持一致，将指令的定义拆分为两个文件：index.js 和 on-scrollto-directive.js文件，index.js文件作为指令的入口，而on-scrollto-directive.js文件则保存了指令的具体定义。
 index.js中的代码：
 ```js
+// 引入定义指令的文件
 import OnScrollto from './src/on-scrollto-directive';
 
+// 定义OnScrollto的install函数，该函数内部是声明on-scrollto指令的语句
 /* istanbul ignore next */
 OnScrollto.install = function (Vue) {
     Vue.directive(OnScrollto.name, OnScrollto);
@@ -60,6 +62,7 @@ OnScrollto.install = function (Vue) {
 
 export default OnScrollto;
 ```
+
 on-scrollto-directive.js中的代码：
 
 ```js
@@ -120,4 +123,86 @@ export default {
     }
 };
 ```
-我们定义了一个
+
+### 指令定义解析
+
+我们分步骤来看定义指令的代码，首先看定义的主体，即下面几行代码：
+```js
+HOOK_PROPNAME = 'VHTML_ON_SCROLLTO_DIRECTIVE';
+export default {
+    name: 'on-scrollto',
+
+    bind(el, binding, vnode) {
+        const onscroll = function () {
+            calcPostion(el, binding);
+        };
+        on(el, 'scroll', onscroll);
+
+        Object.defineProperty(el, HOOK_PROPNAME, {
+            value: onscroll,
+            enumerable: false
+        });
+    },
+
+    unbind(el) {
+        const onscroll = el[HOOK_PROPNAME];
+        off(el, 'scroll', onscroll);
+    }
+};
+```
+
+在钩子函数`bind`中使用了el、binding、vnode三个参数。首先，声明了一个onscroll函数，该函数里会执行我们定义的calcPostion函数，我们稍后再分析这个函数的代码。随后将onscroll函数绑定为元素原生`scroll`事件的回调函数，每当元素的scroll事件被触发时，就会执行calcPostion函数。然后，在元素上定义了一个不可枚举的属性`VHTML_ON_SCROLLTO_DIRECTIVE`，它的值为`onscroll`。我们通过这个属性来标记元素是否绑定了`onscroll`回调函数。
+钩子函数`unbind`很简单，只是解除了`onscroll`函数的绑定。
+
+POSITION_MAP定义了两个触发条件（两个位置计算函数）：bottom和top，它们都返回Boolean类型的值，内部的逻辑分别是满足滑动到元素底部的条件和滑动到元素顶部的条件。某个函数返回值为真时，表示对应的条件成立（滚动条滑到了底部或顶部）。
+```js
+const POSITION_MAP = {
+    bottom: function (el, currentTop) {
+        const styles = getComputedStyle(el);
+        const borderTop = parseInt(styles.borderTopWidth, 10);
+        const borderBottom = parseInt(styles.borderBottomWidth, 10);
+        const targetTop = el.scrollHeight - (el.offsetHeight - borderTop - borderBottom);
+        return (currentTop > 0) && (currentTop >= targetTop);
+    },
+    top: function (el, currentTop) {
+        return currentTop <= 0;
+    }
+};
+```
+
+再看`calcPostion`函数：
+```js
+const calcPostion = debounce(function (el, binding) {
+    if (typeof binding.value !== 'function') {
+        return;
+    }
+
+    Object.keys(binding.modifiers).forEach((mod, index) => {
+        if (!POSITION_MAP[mod]) {
+            return;
+        }
+
+        const currentTop = el.scrollTop;
+        const result = POSITION_MAP[mod](el, currentTop);
+        if (result) {
+            binding.value(mod, currentTop);
+        }
+    });
+}, 200);
+```
+因为我们无法知道DOM元素的原生事件的触发周期，因此这里calcPostion函数的定义使用了防抖动函数debounce，使得calcPostion函数在200ms内只被执行一次。
+
+然后会遍历指令绑定的修饰符，如果指令的当前修饰符绑定的值不是函数，则直接返回；如果绑定的值是函数，且滚动条的位置满足触发条件（bottom或top)，则执行指令绑定的回调函数（即指令的绑定值）。
+
+就这样，简单的`on-scrollto`指令就定义好了，它具有两种修饰符可选：bottom、top，滑动滚动条满足相应的条件就会将指令绑定的值（函数）作为回调函数执行。
+
+## 使用指令
+
+在元素上绑定指令的格式很简单，如下：
+```html
+<element v-on-scrollto.bottom="handleToBottom"></element>
+<element v-on-scrollto.top="handleToTop"></element>
+```
+
+## 总结
+本文通过一个简单的滚动条指令来说明了Vue中自定义指令的定义规范，麻雀虽小五脏俱全。通过本例的扩展即可编写更加复杂而实用的自定义指令。
