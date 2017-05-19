@@ -22,21 +22,7 @@ pattern-fill作为Highcharts的一个插件存在，顾名思义，这个插件�
 
 **注：** 源码分析部分直接在代码中添加注解
 
-源码的头部定义了CommonJS风格的接口，并传入全局变量Highcharts，由此也可以看出该插件必须依赖Highcharts而存在。
-```js
-(function (factory) {
-    if (typeof module === 'object' && module.exports) {
-        module.exports = factory;
-    } else {
-        factory(Highcharts);
-    }
-}(function (Highcharts) {
-    'use strict'
-    // 源码
-}));
-```
-
-第一部分的源码：
+我们来看下pattern-fill的核心代码：
 
 ```js
 var idCounter = 0;
@@ -44,7 +30,7 @@ var wrap = Highcharts.wrap;
 var each = Highcharts.each;
 
 /**
- * Exposed method to add a pattern to the renderer.
+ * 在Highcharts的SVGRenderer对象的原型对象上添加一个addPattern方法，该方法在渲染器上添加一个svg pattern
  * @param  {String} id      pattern的id号
  * @param  {Object} options 配置项
  * @return {Object}         pattern
@@ -57,7 +43,7 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
     var ren = this;
 
     /**
-     * Add a rectangle for solid color
+     * 定义一个实心矩形，后面用于填充pattern的背景
      * @param  {String} fill [description]
      */
     function rect(fill) {
@@ -75,7 +61,7 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
 
     pattern = this.createElement('pattern').attr({
         id: id,
-        patternUnits: 'userSpaceOnUse',
+        patternUnits: 'userSpaceOnUse', // 表示坐标系统由pattern被引用处的坐标系统确定
         width: options.width || 10,
         height: options.height || 10
     }).add(this.defs);
@@ -83,16 +69,16 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
     // Get id
     pattern.id = pattern.element.id;
 
-    // Use an SVG path for the pattern
+    // 第一种模式：用SVG path 来定义pattern
     if (options.path) {
         path = options.path;
 
-        // The background
+        // 设置path的背景色
         if (path.fill) {
             rect(path.fill);
         }
 
-        // The pattern
+        // 用path来绘制pattern
         this.createElement('path').attr({
             d: path.d || path,
             stroke: path.stroke || options.color || '#343434',
@@ -100,7 +86,7 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
         }).add(pattern);
         pattern.color = options.color;
 
-    // Image pattern
+    // 第二种模式：用图片来定义pattern
     }
     else if (options.image) {
         this.image(options.image, 0, 0, options.width, options.height).add(pattern);
@@ -110,6 +96,7 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
     else if (options.color) {
         rect(options.color);
     }
+    // 设置透明度
     if (options.opacity !== undefined) {
         each(pattern.element.children, function (child) {
             child.setAttribute('opacity', options.opacity);
@@ -118,9 +105,119 @@ Highcharts.SVGRenderer.prototype.addPattern = function (id, options) {
     return pattern;
 };
 ```
+上面的代码在Highcharts的SVGRenderer对象的原型对象上添加一个addPattern方法，该方法执行的结果是返回一个定义好的pattern。
+代码中有两种定义pattern的方式：SVG path和image，根据使用者传入的不同配置项来使用不同的方式。对于SVG path方式，需要传入的主要配置项有：id、path对象、height、width、透明度等，其中path对象需要配置路径（d）、线条颜色、背景色、线条宽度等。
 
+在另外一段代码中：
+```js
+if (Highcharts.VMLElement) {
+    Highcharts.VMLRenderer.prototype.addPattern = function (id, options) {
+        var patterns;
+        if (!id) {
+            id = 'highcharts-pattern-' + idCounter;
+            idCounter += 1;
+        }
+        patterns = this.patterns || {};
+        patterns[id] = options;
+        this.patterns = patterns;
+    };
 
+    // wrap函数时Highcharts提供的用于扩展已有原型对象方法的工具，这里使用wrap函数重写了Element原型对象上的`fillSetter`函数
+    // 使得Highcharts在渲染元素的颜色时支持以`url(#pattern-id)`的方式来设置颜色和填充色
+    // proceed是被重写的函数本身，作为第一个参数传入回调
+    Highcharts.wrap(Highcharts.VMLRenderer.prototype.Element.prototype, 'fillSetter', function (proceed, color, prop, elem) {
+        if (typeof color === 'string' && color.substring(0, 5) === 'url(#') {
+            var id = color.substring(5, color.length - 1),
+                pattern = this.renderer.patterns[id],
+                markup;
+
+            if (pattern.image) {
+                // Remove Previous fills
+                if (elem.getElementsByTagName('fill').length) {
+                    elem.removeChild(elem.getElementsByTagName('fill')[0]);
+                }
+
+                markup = this.renderer.prepVML(['<', prop, ' type="tile" src="', pattern.image, '" />']);
+                elem.appendChild(document.createElement(markup));
+
+                // Work around display bug on updating attached nodes
+                if (elem.parentNode.nodeType === 1) {
+                    elem.outerHTML = elem.outerHTML;
+                }
+
+            } else if (pattern.color) {
+                proceed.call(this, pattern.color, prop, elem);
+            } else {
+                proceed.call(this, '#A0A0A0', prop, elem);
+            }
+        } else {
+            proceed.call(this, color, prop, elem);
+        }
+    });
+}
+```
+在VMLRenderer原型对象上也定义了对应的addPattern方法，这个方法重写了每个元素的`fillSetter`方法。因此在使用Highcharts时，我们就能在任意可配置color或fillColor的地方使用我们自定义的pattern，使用实例见后文。
+
+最后一段代码将自定义的pattern都添加到defs中。defs是SVG规范规定的用于存放待使用的图形对象的容器，Highcharts也对这个特性提供了支持，因此，这里将定义的pattern对象都添加到defs对象中：
+```js
+// 重写getContainer函数，在其中执行添加patterns的操作
+wrap(Highcharts.Chart.prototype, 'getContainer', function (proceed) {
+    proceed.apply(this);
+
+    var chart = this,
+        renderer = chart.renderer,
+        options = chart.options,
+        patterns = options.defs && options.defs.patterns;
+
+    // 添加默认的 patterns
+    // pattern-fill默认提供了10个patern，一般用不到
+    addPredefinedPatterns(renderer);
+
+    // 添加自定义的patterns
+    if (patterns) {
+        each(patterns, function (pattern) {
+            renderer.addPattern(pattern.id, pattern);
+        });
+    }
+});
+```
 ### 用法
 
+分析完pattern的源码，其用法就很明了了：先在defs中定义自己的pattern（svg或图片），然后在chart的配置项中用`color: url(#pattern-id)`的形式使用pattern。
+看一个实例：
+```js
+options: {
+    // defs中自定义pattern
+    defs: {
+        patterns: [{
+            id: 'light-green-pattern',
+            path: {
+                d: 'M 0 5 L 5 0 M -1 1 L 1 -1 M 4 6 L 6 4',
+                stroke: '#00cc26', // 线条颜色
+                strokeWidth: 1,
+                fill: '#CCF5D4'    // path的背景颜色
+            },
+            width: 5,
+            height: 5
+        }]
+    }
+},
+series: [{
+    name: '浏览量',
+}, {
+    name: '访客数',
+    // 在配置项series中根据id使用自定义pattern
+    fillColor: 'url(#light-green-pattern)',
+    color: 'url(#light-green-pattern)',
+    lineWidth: 0,
+    marker: {
+        fillColor: '#00cc26'
+    }
+}]
+```
+下面是使用自定义斜线填充的效果图，完美符合设计师大大的要求。
 
+<img src="/assets/img/splash-chart.png" width="1000">
+
+终于可以开心地使用Highcharts了！
 
