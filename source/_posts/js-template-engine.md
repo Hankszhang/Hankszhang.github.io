@@ -4,18 +4,20 @@ title: 简易Javascript 模板引擎
 comments: true
 reward: true
 date: 2017-02-09 20:59:14
-tags: [技术, JS, 前端]
+categories: Frontend
 ---
 
 > 最近在研究学习JavaScript的模板引擎的实现原理，读到[Krasimir Tsonev](https://github.com/krasimir)的这篇介绍JS模板引擎实现原理的文章，对于新手很是受用，因此翻译过来。
 
 > 原文链接：[JavaScript template engine in just 20 lines](http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line)
 
+<!--more-->
+
 我还在忙于开发基于JavaScript的预处理器——[**AbsurdJS**](http://krasimirtsonev.com/blog/article/AbsurdJS-fundamentals), 它最开始仅作为CSS预处理器，后来扩展为CSS/HTML预处理器。简而言之，它可以将JavaScript转换为CSS/HTML。自然的，由于它可以生成HTML，因此可以作为模板引擎使用，即将数据填充到标签中。
 
 因此，我想写一个简单的模板引擎逻辑，来完美兼容现在的项目。[**AbsurdJS**](http://krasimirtsonev.com/blog/article/AbsurdJS-fundamentals)主要作为NodeJS模块来使用，不过有时候也需要在客户端使用。我发现目前还没有引擎能满足这一需求，因为大多数引擎都是基于NodeJS运行环境的，从而很难移植到浏览器运行。我需要一个小巧且用纯JavaScript写的引擎。恰好[**John Resig**](http://ejohn.org/)的[**这篇文章**](http://ejohn.org/blog/javascript-micro-templating/)中提出的引擎满足我的需求。我对它稍作修改，并减缩到20行代码。研究这段脚本的原理是很有意思的事情。本文中我会一步一步重构这个引擎，以便读者能够理解来自John的绝妙idea。
 
-<!--more-->
+
 
 首先，我们的模板引擎应该长这样：
 ```js

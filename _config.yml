@@ -46,11 +46,14 @@ highlight:
 # code highlight plugin
 prism_plugin:
   mode: 'preprocess'    # realtime/preprocess
-  theme: 'tomorrow'     # default、dark、okaidia、tomorrow
-  line_number: true
+  theme: 'duotone-dark'     # default、atom-dark、okaidia、duotone-dark
+  line_number: false
 # Category & Tag
 default_category: uncategorized
 category_map:
+    Frontend: 'Frontend'
+    Reading: 'Reading'
+    Experience: 'Experience'
 tag_map:
 
 # Archives
@@ -76,7 +79,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: yilia
+theme: material
 
 jsonContent:
   meta: false
@@ -94,8 +97,8 @@ jsonContent:
     link: false
     permalink: false
     excerpt: false
-    categories: false
-    tags: true
+    categories: true
+    tags: false
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html

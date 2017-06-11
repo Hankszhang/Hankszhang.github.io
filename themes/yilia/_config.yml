@@ -3,8 +3,6 @@
 menu:
   主页: /
   所有文章: /archives
-  技术: /tags/技术/
-  随笔: /tags/随笔/
 
 # SubNav
 subnav:

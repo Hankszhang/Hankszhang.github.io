@@ -1,7 +1,7 @@
 ---
 title: 闭包那点事儿
 date: 2017-03-15 11:48:37
-tags: [技术, JS, 前端]
+categories: Frontend
 ---
 
 > 一直以来都没有彻底理解JavaScript的闭包特性及其使用，《JavaScript Ninja》中 **闭包** 一章是我读过讲解闭包的书籍或博客中，梳理的最清晰的，以此为基础整理了自己对闭包的理解。
