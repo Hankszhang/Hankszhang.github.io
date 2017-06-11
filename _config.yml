@@ -81,6 +81,10 @@ pagination_dir: page
 ## Themes: https://hexo.io/themes/
 theme: material
 
+search: 
+    path: search.xml
+    field: all
+
 jsonContent:
   meta: false
   pages: false
@@ -104,5 +108,5 @@ jsonContent:
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/Hankszhang/Hankszhang.github.io.git
+  repo: git@github.com:Hankszhang/Hankszhang.github.io.git
   branch: master
