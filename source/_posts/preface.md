@@ -3,7 +3,6 @@ layout: post
 title: My Blog
 date: 2017-02-09 19:59:35
 categories: Experience
-top: true
 ---
 
 ------
@@ -19,9 +18,9 @@ top: true
 - 第二阶段，发现免费空间限制太多，就自己购买域名和空间，搭建独立博客。
 - 第三阶段，觉得独立博客的管理太麻烦，最好在保留控制权的前提下，让别人来管，自己只负责写文章。
 
-而我正处于第一、第二阶段的过渡阶段，在众多选择之中，最终选择了Github Pages + Hexo来搭建我的独立博客。原因很简单，一是Github与git搭配的天然优势，二是Hexo简洁的风格和丰富的插件正合我意。
+而我正处于第一、第二阶段的过渡阶段，在众多选择之中，最终选择了Github Pages + Hexo来搭建我的独立博客。原因很简单，一是Github与git搭配的天然优势，二是Hexo简洁的风格和丰富的插件正合我意。本人是一个Google粉，自然而然大爱Material Design，因此整个博客选取的主题也是[Material风格](https://github.com/viosey/hexo-theme-material)。
 
-正如我最喜欢的Hexo主题——[Yilia]((https://github.com/litten/hexo-theme-yilia)的作者所说，有了自己的独立博客就等于有了自己的一片田地，好好耕耘，终会收获丰硕的果实。
+有了自己的独立博客就等于有了自己的一片田地，好好耕耘，终会收获丰硕的果实。
 
 # 参考
 - [Litten的博客](http://litten.github.io/)
