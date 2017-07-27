@@ -76,7 +76,7 @@ CORS跨域请求的具体实施方案，可参考MDN的参考文档[HTTP访问�
 
 简单的来说，首先在Nginx服务器上需要做如下配置：
 
-```PHP
+```php
 #
 # Wide-open CORS config for nginx
 #
