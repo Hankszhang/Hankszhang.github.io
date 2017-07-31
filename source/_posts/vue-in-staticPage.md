@@ -23,7 +23,7 @@ var vueInstance = new Vue({
     methods: {}
 });
 ```
-经实际测试，在IE的兼容性模式下，将
+需要注意的是，由于[IE浏览器基本上不支持ES6](https://kangax.github.io/compat-table/es6/)，而我们使用的vue没有进行预编译，因此我们不能像往常一下在vue中使用ES6的特性，如：函数简写、`let`、`const`等，只能老老实实的用一般语法来写。
 ```javascript
 data: fucntion () {}
 ```
