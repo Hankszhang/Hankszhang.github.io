@@ -1,4 +1,4 @@
-<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta" style="position:relative;">
 
     <!-- Author Avatar -->
     <div id="author-avatar">
@@ -9,6 +9,10 @@
         <strong><%= config.author %></strong>
         <span><%= date(page.date, 'MMM DD, YYYY') %></span>
     </div>
+    
+    <span id="busuanzi_container_page_pv" style="position:absolute; right: 90px;">
+        阅读量：<span id="busuanzi_value_page_pv"></span>
+    </span>
 
     <div class="section-spacer"></div>
 
