@@ -14,6 +14,8 @@ tags:
 
 官方介绍RxJS用了一句话：**Think of RxJS as Lodash for events**。我们都知道`Lodsh`是一个强大的工具库，而把`RxJS`看作是专为处理事件的`Lodash`，可以知道，`RxJS`的特点是处理事件，自然就包括同步和异步的处理。
 
+`RxJS`的的全称是Reactive Extensions for JavaScript，即JavaScript的响应式扩展。响应式的思路是：把不断变化的数据（状态/事件等）转换成Observable对象，数据的消费者只需要订阅Observable对象的变化，一旦数据发生变化，就会执行事先部署好的执行序列。
+
 `RxJS`的API提供了一个核心类型：`Observable`, 以及五种辅助类型：`Observer`, `Subscription`, `Subject`, `Operators`, `Scheduler`。下面分别来看这几个基本概念。
 
 ### Observable
