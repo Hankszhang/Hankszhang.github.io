@@ -1,5 +1,5 @@
 ---
-title: 一张图理解RxJS
+title: 图解RxJS
 categories: Frontend
 comment: false
 date: 2017-11-18 16:02:07
@@ -19,7 +19,16 @@ tags:
 `RxJS`的API提供了一个核心类型：`Observable`, 以及五种辅助类型：`Observer`, `Subscription`, `Subject`, `Operators`, `Scheduler`。下面分别来看这几个基本概念。
 
 ### Observable
+- *Observables are like functions with zero arguments, but generalize those to allow multiple values*
+- *Observables are able to deliver values either synchronously or asynchronously*
 
+一个Observable是一个从它被调用开始，可以同步或异步地返回0至无穷多个值的懒计算。它具有三个特点：
+1. 可以产生多个值
+2. 同时支持同步和异步
+3. 懒计算：只有当它被调用时才会开始产生值
+
+下图将Observable解构为4部分来帮助理解
+![observable](/assets/img/observable.png)
 
 ### Observer
 
@@ -36,3 +45,8 @@ tags:
 通读完文档和示例，再结合自己的理解，发现整个RxJS的概念可以用一幅图来阐述。
 
 <img src="/assets/img/rxjs.png" width="1000">
+
+## RxJS需要注意的点
+
+- Observable 只有在被subscribe的时候才会被初始化执行
+- 民工叔的文章理解
