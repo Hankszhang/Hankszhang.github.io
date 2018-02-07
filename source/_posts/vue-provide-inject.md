@@ -53,6 +53,80 @@ vhtmlOverlayUpdate(key: string, data?: OverlayRect) {
 }
 ```
 
-这里，我们的回调函数做的事情很简单，就是将overlay传来的数据分发到我们事先定义好的数据流(也就是这里的native:updateOverlay)，处理overlays的逻辑放在数据层的数据流里面做。这样做的好处是视图层和数据层可以很好的解耦
+这里，我们的回调函数做的事情很简单，就是将overlay传来的数据分发到我们事先定义好的数据流(也就是这里的native:updateOverlay)，在数据流里处理overlays的逻辑。这样做的好处是视图层和数据层可以很好的解耦，视图层负责处理页面渲染相关的逻辑，而相对较重的业务逻辑放在数据层做，这也是我们引入RxJS构建数据层的目的。关于overlays的处理逻辑后文
+
+接下来，在每个overlay组件内通过`inject`将定义好的回调函数注入到组件中，可以封装成`mixin`引入overlay组件中。
+
+```javascript
+// mixin文件: overlay.js 
+// 用于生成唯一id的工具函数
+import uuid from 'vhtml-ui/src/utils/uuid';
+// 用一个不容易冲突的key和cb的名字
+const VHTML_ANCIENT_OVERLAY_KEYS = 'VHTML_ANCIENT_OVERLAY_KEYS';
+const VHTML_OVERLAY_CB = 'vhtmlOverlayUpdate';
+
+export default {
+    inject: {
+        // 注入overlay变化时的回调函数，用于抛出overlay的位置信息和key值
+        [VHTML_OVERLAY_CB]: {
+            default: null
+        }
+    },
+
+    data() {
+        const key = `${uuid()}_${Date.now().toString(36)}`;
+        return {
+            overlayKey: key
+        };
+    }
+}
+```
+
+在mixin文件`overlay.js`中，通过`inject`注入了`vhtmlOverlayUpdate`，也就是从`App.vue` provide的回调函数。同时，也为每个overlay组件的生成了一个唯一的key，用于标识该overlay。
+
+这里用到了Vue从2.5.0+开始加入的新特性：支持给`inject`的变量指定默认值。因此，当我们没有从父组件provide`vhtmlOverlayUpdate`变量时，就用它的默认值：`null`，这个特性有助于提高使用inject时代码的一致性。
+
+现在我们就可以在overlay组件里面拿到注入的回调函数和组件的key值了，overlay组件在`show`或`hide`的时候，执行下列代码，就可以将组件的key和position信息通过回调函数抛给数据流了。
+
+```javascript
+// 该方法用于统一管理浮层
+if (typeof this.vhtmlOverlayUpdate === 'function') {
+	this.vhtmlOverlayUpdate(this.overlayKey, isOpen ? getRect(this.$el) : undefined);
+}
+```
+
+最后，我们维护了一个overlays数组用于保存当前打开的所有overlays，当有overlay有更新时，传入根据参数key和data对overlays数组进行增删改，最后将overlays数组通过流的方式被视图层订阅，视图层便拿到了当前页面中所有打开的overlay和他们的位置信息。
+
+```javascript
+updateOverlays(acc: OverlayInfo[], val: OverlayInfo) {
+    const key = val.key;
+    const data = val.data;
+    const overlays: OverlayInfo[] = [...acc];
+    const curr = overlays.findIndex((item: OverlayInfo) => item.key === key);
+    // 当前overlay已存在于已有overlays中
+    if (curr !== -1) {
+        // 更新位置信息
+        if (data) {
+            overlays[curr].data = data;
+        }
+        // 没有data表示关闭，则从overlays中删除
+        else {
+            overlays.splice(curr, 1);
+        }
+    }
+    // 当前overlay还未保存于overlays中，则新增
+    else if (data) {
+        overlays.push({
+            key: key,
+            data: data
+        });
+    }
+    return overlays;
+}
+```
+
+**注**: 数据流部分涉及RxJS的知识，不是本文的重点，此处不述。
 
 ## 总结
+
+本文主要介绍了一个利用provide/inject对组件库中所有浮层组件实现统一管理的方案。对于业务较复杂的组件间通信，provide/inject是一个很好的方案，它适用于组件层次深、组件多但有一定的收拢性的场景。
