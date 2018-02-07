@@ -1,18 +1,14 @@
-<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta" style="position:relative;">
+<div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
 
     <!-- Author Avatar -->
     <div id="author-avatar">
-        <img src="<%- theme.img.avatar %>" width="44px" height="44px" alt="Author Avatar"/>
+        <img src="<%- url_for(theme.img.avatar) %>" width="44px" height="44px" alt="Author Avatar"/>
     </div>
     <!-- Author Name & Date -->
     <div>
         <strong><%= config.author %></strong>
         <span><%= date(page.date, 'MMM DD, YYYY') %></span>
     </div>
-    
-    <span id="busuanzi_container_page_pv" style="position:absolute; right: 90px;">
-        阅读量：<span id="busuanzi_value_page_pv"></span>
-    </span>
 
     <div class="section-spacer"></div>
 
@@ -30,7 +26,7 @@
     <% } %>
 
     <!-- Tags (bookmark) -->
-    <% if(page.notag !== true) { %>
+    <% if (page.tags && page.tags.length) { %>
     <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i class="material-icons" role="presentation">bookmark</i>
         <span class="visuallyhidden">bookmark</span>
@@ -47,5 +43,7 @@
     <% } %>
 
     <!-- Share -->
-    <%- partial('_partial/post-info-share') %>
+    <% if(page.hide_share !== true) { %>
+        <%- partial('_partial/post-info-share') %>
+    <% } %>
 </div>

@@ -7,7 +7,7 @@ title: Hanks' blog
 subtitle: Stay curious and keep learning
 description: 前端之路漫漫，其修远兮，吾将上下而求索
 author: Hanks
-language: zh-CN
+language: en
 timezone:
 
 # URL
@@ -44,10 +44,10 @@ highlight:
   tab_replace:
 
 # code highlight plugin
-prism_plugin:
-  mode: 'preprocess'    # realtime/preprocess
-  theme: 'duotone-dark'     # default、atom-dark、okaidia、duotone-dark
-  line_number: false
+# prism_plugin:
+#   mode: 'preprocess'    # realtime/preprocess
+#   theme: 'duotone-dark'     # default、atom-dark、okaidia、duotone-dark
+#   line_number: false
 # Category & Tag
 default_category: uncategorized
 category_map:

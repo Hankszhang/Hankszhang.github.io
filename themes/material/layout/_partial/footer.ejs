@@ -1,6 +1,5 @@
 <!--Footer-->
 <footer class="mdl-mini-footer" id="bottom">
-    <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
     <% if(theme.scheme === 'Paradox') { %>
         <!-- Paradox Footer Left Section -->
         <%- partial('_partial/footer-left') %>
@@ -8,9 +7,14 @@
         <!--Copyright-->
         <div id="copyright">
             Copyright&nbsp;©<% if(theme.copyright_since) { %>&nbsp;<%= theme.copyright_since %>&nbsp;-<% } %><script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script><%- config.title %>
-            <span id="busuanzi_container_site_uv" style="margin-left:10px;">
-               您是第&nbsp;<span id="busuanzi_value_site_uv" style="color:red;"></span>&nbsp;位访客
-            </span>
+            <% if(theme.footer_text) { %>
+                <br>
+                <% if(Array.isArray(theme.footer_text)) { %>
+                    <%- theme.footer_text.join('<br>') %>
+                <% } else { %>
+                    <%- theme.footer_text %>
+                <% } %>
+            <% } %>
         </div>
 
         <!-- Paradox Footer Right Section -->
