@@ -45,7 +45,7 @@ uiux:
 # JS Effect Switches
 js_effect:
     fade: true
-    smoothscroll: false
+    smoothscroll: true
 
 # Reading experience
 reading:
@@ -70,10 +70,10 @@ background:
 
 # Images Settings
 img:
-    logo: "/assets/img/peabody.jpg"
+    logo: "/assets/img/logo.png"
     avatar: "/assets/img/avatar.png"
-    daily_pic: "/img/daily_pic.png"
-    sidebar_header: "/img/sidebar_header.png"
+    daily_pic: "/assets/img/daily_pic.png"
+    sidebar_header: "/assets/img/sidebar_header.png"
     random_thumbnail: "/img/random/material-"
     footer_image:
         #upyun_logo:
@@ -166,7 +166,7 @@ sns:
     tumblr:
     github: "https://github.com/Hankszhang"
     linkedin:
-    zhihu: “https://www.zhihu.com/people/hanks-zhang-8”
+    zhihu: "https://www.zhihu.com/people/hanks-zhang-8"
     bilibili:
     telegram:
     v2ex:

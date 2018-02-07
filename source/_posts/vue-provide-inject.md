@@ -7,8 +7,6 @@ tags:
 ---
 
 
->   ​     
-
 >   在基于Vue构建大型应用时，不可避免地需要在不同层级的组件之间进行通信，Vue提供了`props/event`、`event bus`、`Vuex`、`provide/inject`等方式来实现组件间通信。本文将阐述一种基于provide/inject来统一管理组件库中各类弹窗组件的思路。
 
 <!--more-->
@@ -33,12 +31,28 @@ Vue从2.2.0开始加入了[provide/inject](https://vuejs.org/v2/api/#provide-inj
 
 我们的目标是得到页面中所有打开的overlay。现在，让我们换一种思路——我们不主动去“获取”每个overlay的状态，而是让每个overlay在改变自己的开闭状态时主动通知“管理员”：“嗨，我打开（或关闭）了”。使用`provide/inject`，我们就可以在overlay与“管理员”之间建立联系：
 
-1.  在页面组件树的根组件（一般是App.vue）上`provide`一个回调函数
+<div style="text-align: center;">![vue_project_inject](/assets/img/vue_provide_inject.png)</div>
+
+1.  在页面组件树的根组件（本文中是App.vue）上`provide`一个回调函数(暂叫updateCallback)
 2.  在每个overlay组件内`inject`这个回调函数，当该overlay组件在打开或关闭时，都调用这个回调函数，并将组件的信息（如key、postion等）传递给回调函数。
 3.  在回调函数里统一维护overlay组件的状态及其信息。
 
 ### 怎么写
 
 下面我们看看具体的代码实现。
+
+首先，我们需要在`App.vue`中`provide`选项中定义我们的回调函数，该函数应具有统一处理所有overlay的功能。在我们的项目中，我们使用RxJS来实现数据层，关于RxJS的知识这里不赘述，感兴趣的读者可以去[RxJS官网](http://reactivex.io/rxjs/)了解。
+
+```javascript
+@Provide('vhtmlOverlayUpdate')
+vhtmlOverlayUpdate(key: string, data?: OverlayRect) {
+    this.$dispatch('native:updateOverlay', {
+        key: key,
+        data: data
+    });
+}
+```
+
+这里，我们的回调函数做的事情很简单，就是将overlay传来的数据分发到我们事先定义好的数据流(也就是这里的native:updateOverlay)，处理overlays的逻辑放在数据层的数据流里面做。这样做的好处是视图层和数据层可以很好的解耦
 
 ## 总结
