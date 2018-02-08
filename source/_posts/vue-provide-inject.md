@@ -19,7 +19,7 @@ tags:
 
 <div style="text-align: center;">![webview_AIO](/assets/img/webview_AIO.png)</div>
 
-我们项目中使用了团队自主开发的公司内部开源组件库[vhtml](https://github.com/0067ED/vhtml)，目前vhtml有popper、dialog、pannel、contextmenu等常用浮层类组件（下文统称为`overlay`）。根据需求，每当有一个浮层出现时，都要知道这个浮层是谁，它的大小是多少，当前出现在webview页面上的哪个位置。在实际业务应用中，上述浮层类组件的大小、在页面组件树中的层级和数量都是不可预知的，甚至经常会出现嵌套使用的case。那么在这种情况下，我们怎么才能知道现在webview页面中哪些浮层组件是打开的，哪些是关闭的呢？换句话说，这种情况下该如何进行组件间通信呢？答案就是provide/inject。
+我们项目中使用了团队自主开发的公司内部开源组件库[vhtml](https://github.com/0067ED/vhtml)，目前vhtml有popper、dialog、pannel、contextmenu等常用浮层类组件（下文统称为`overlay`）。根据需求，每当有一个浮层出现时，都要知道这个浮层是谁，它的大小是多少，当前出现在webview页面上的哪个位置。在实际业务应用中，浮层类组件的大小、在页面组件树中的层级和数量都是不可预知的，甚至经常会出现嵌套使用的场景。那么在这种情况下，我们怎么才能知道现在webview页面中哪些浮层组件是打开的，哪些是关闭的呢？换句话说，这种情况下该如何进行组件间通信呢？答案就是provide/inject。
 
 ### provide/inject
 
@@ -29,7 +29,9 @@ Vue从2.2.0开始加入了[provide/inject](https://vuejs.org/v2/api/#provide-inj
 
 ### 怎么做
 
-我们的目标是得到页面中所有打开的overlay。现在，让我们换一种思路——我们不主动去“获取”每个overlay的状态，而是让每个overlay在改变自己的开闭状态时主动通知“管理员”：“嗨，我打开（或关闭）了”。使用`provide/inject`，我们就可以在overlay与“管理员”之间建立联系：
+我们的目标是拿到页面中所有打开的overlay。现在，让我们换一种思路——我们不主动去“获取”每个overlay的状态，而是让每个overlay在改变自己的开闭状态时主动通知“管理员”：“嗨，我打开（或关闭）了”。
+
+使用`provide/inject`，我们就可以在overlay与“管理员”之间建立联系：
 
 <div style="text-align: center;">![vue_project_inject](/assets/img/vue_provide_inject.png)</div>
 
@@ -53,9 +55,9 @@ vhtmlOverlayUpdate(key: string, data?: OverlayRect) {
 }
 ```
 
-这里，我们的回调函数做的事情很简单，就是将overlay传来的数据分发到我们事先定义好的数据流(也就是这里的native:updateOverlay)，在数据流里处理overlays的逻辑。这样做的好处是视图层和数据层可以很好的解耦，视图层负责处理页面渲染相关的逻辑，而相对较重的业务逻辑放在数据层做，这也是我们引入RxJS构建数据层的目的。关于overlays的处理逻辑后文
+这里，我们的回调函数做的事情很简单，就是将overlay传来的数据分发到我们事先定义好的数据流(也就是这里的native:updateOverlay)，在数据流里处理overlays的逻辑。这样做的好处是视图层和数据层可以很好的解耦，视图层负责处理页面渲染相关的逻辑，而相对较重的业务逻辑放在数据层做，这也是我们引入RxJS构建数据层的目的。关于overlays的处理逻辑见后文。
 
-接下来，在每个overlay组件内通过`inject`将定义好的回调函数注入到组件中，可以封装成`mixin`引入overlay组件中。
+接下来，在每个overlay组件内通过`inject`将定义好的回调函数注入到组件中，可以封装成`mixin`引入到overlay组件中。
 
 ```javascript
 // mixin文件: overlay.js 
@@ -84,7 +86,7 @@ export default {
 
 在mixin文件`overlay.js`中，通过`inject`注入了`vhtmlOverlayUpdate`，也就是从`App.vue` provide的回调函数。同时，也为每个overlay组件的生成了一个唯一的key，用于标识该overlay。
 
-这里用到了Vue从2.5.0+开始加入的新特性：支持给`inject`的变量指定默认值。因此，当我们没有从父组件provide`vhtmlOverlayUpdate`变量时，就用它的默认值：`null`，这个特性有助于提高使用inject时代码的一致性。
+这里用到了Vue从2.5.0+开始加入的新特性：支持给`inject`的变量指定默认值。因此，当我们没有从父组件provide`vhtmlOverlayUpdate`变量时，就用它的默认值：`null`。
 
 现在我们就可以在overlay组件里面拿到注入的回调函数和组件的key值了，overlay组件在`show`或`hide`的时候，执行下列代码，就可以将组件的key和position信息通过回调函数抛给数据流了。
 
@@ -94,6 +96,8 @@ if (typeof this.vhtmlOverlayUpdate === 'function') {
 	this.vhtmlOverlayUpdate(this.overlayKey, isOpen ? getRect(this.$el) : undefined);
 }
 ```
+
+**注**: 为了统一用一个接口，当打开时传入回调函数的第二个参数为组件的位置信息，而关闭时则为`undefined`。
 
 最后，我们维护了一个overlays数组用于保存当前打开的所有overlays，当有overlay有更新时，传入根据参数key和data对overlays数组进行增删改，最后将overlays数组通过流的方式被视图层订阅，视图层便拿到了当前页面中所有打开的overlay和他们的位置信息。
 
