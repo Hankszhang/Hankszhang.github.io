@@ -18,4 +18,4 @@
 5. 启动本地服务，进行预览调试：`$ hexo server`，本地服务器地址为：http://localhost:4000
 6. 新建文章：`$ hexo new 'pageName'`
 6. 将编写的markdown页面编译成静态页面：`$ hexo generate`或`$ hexo g`
-7. 部署bolg至github：`$ hexo deploy`，也可以使用`hexo generate -g`命令编译后自动部署
+7. 部署bolg至github：`$ hexo deploy`，也可以使用`hexo generate -d`命令编译后自动部署
