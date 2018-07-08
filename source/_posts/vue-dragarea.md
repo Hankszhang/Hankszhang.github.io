@@ -1,10 +1,14 @@
 ---
 title: 基于Vue的跨区域拖拽方案实现
+categories: Frontend
+tags:
+  - JavaScript
+  - Vue
+  - drag
 comment: false
 date: 2018-07-06 16:03:01
-categories: Frontend
-tags: ['JavaScript', 'Vue', 'drag']
 ---
+
 
 > 数据驱动是Vue的核心思想之一，Vue官方也鼓励使用数据驱动思想进行开发，这样可以有效利用Vue的diff算法提升性能。拖拽是前端开发中一种常见的交互形式，本文介绍一种利用Vue的数据驱动特性和双向绑定能力实现的跨区域拖拽方案(兼容IE9+)。
 
@@ -249,4 +253,11 @@ beforeDestroy() {
     eventBus.$off(VHTML_DRAGEAREA_DROPINFO_UPDATE, this.updateDropInfo);
 }
 ```
+每个`dragarea`中都会监听`eventBus`上的`VHTML_DRAGEAREA_DROPINFO_UPDATE`事件，同时会在`mousemove`回调中触发该事件，这样一来，每个`dragarea`的`dropInfo`状态都会同步到所有的`dragarea`中。对于每个`dragarea`，只有目标drop区域是当前`dragarea`的时候才更新`dropInfo`。
 
+
+## 结语
+
+跨区域拖拽组件从交互和实现角度来说，都可以说是基础组件中比较复杂的一种。一图胜千言，最后展示一下基于本文方案实现的拖拽组件demo：
+
+<div style="text-align: center;">![drag-demo](/assets/img/drag-demo.gif)</div>
