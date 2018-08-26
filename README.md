@@ -6,7 +6,7 @@
 2. 如果还没有博客，可以执行`$ hexo init blogName`来新建一个博客
 3. 配置github仓库库，讲本地项目与github仓库关联起来：
     - 建立github仓库，仓库名必须为：username.github.io
-    - 在仓库中新建分支（如hexo等），并设置为主分支，将本地目录与username.github.ig仓库的heox分支关联起来，这样就可以将博客原文（hexo分支）与部署的静态文件（在master分支）保存在同一个项目中，便于多端同步
+    - 在仓库中新建分支（如hexo等），并设置为主分支，将本地目录与username.github.io仓库的heox分支关联起来，这样就可以将博客原文（hexo分支）与部署的静态文件（在master分支）保存在同一个项目中，便于多端同步
     - 在本地项目根目录的_config.yml文件底部配置如下：
     ```yml
     deploy:
