@@ -2,8 +2,8 @@
 title: Vue之自定义指令
 date: 2017-05-07 23:04:54
 categories: Frontend
-reward: true
-comment: true
+reward: false
+comment: false
 ---
 
 > 我们都知道在Vue中，代码复用和抽象的主要形式是**组件**。但是在有些情况下，我们可能仅需要操作一些普通元素，这个时候如果也使用自定义组件会显得很笨重。因此，Vue允许注册自定义指令来实现一些简单的功能。本文将结合自定义指令`on-scrollto`来看看在Vue中是如何实现自定义指令的。
