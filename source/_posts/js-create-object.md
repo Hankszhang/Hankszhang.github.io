@@ -8,8 +8,8 @@ categories: Frontend
 
 > JavaScript作为一门动态性的面向对象的编程语言，其核心思想就是一切皆对象。为了深入理解JS面向对象的编程思想，本文总结了几种常见的创建JS对象的方法，比较了各自的优缺点以及使用场景。
 
-> 参考书籍：《Javascript高级程序设计》（第3版）、《Javascript权威指南》
-> 
+> 参考书籍：《Javascript高级程序设计》（第3版）、《Javascript权威指南》 
+
 <!-- more -->
 
 #### 1. 对象字面量
