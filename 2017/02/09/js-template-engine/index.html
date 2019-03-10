@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+    <link rel="dns-prefetch" href="https://busuanzi.ibruce.info">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            简易Javascript 模板引擎 | 
+        
+        Hanks&#39; blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/assets/img/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="
+最近在研究学习JavaScript的模板引擎的实现原理，读到Krasimir Tsonev的这篇介绍JS模板引擎实现原理的文章，对于新手很是受用，因此翻译过来。
+
+
+原文链接：JavaScript template engine in just 20 lines
+">
+    <meta name="keywords" content="null">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/tomorrow.min.css?HIeSQl6y3t6jBuxHvLPGSA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+            
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?ezyEvm8ST5CGfpA+kFFi1g==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Hanks&#39; blog">
+    <meta name="msapplication-starturl" content="https://github.com/Hankszhang/2017/02/09/js-template-engine/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Hanks&#39; blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/assets/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://github.com/Hankszhang/2017/02/09/js-template-engine/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="简易Javascript 模板引擎 | Hanks&#39; blog">
+    <meta property="og:image" content="/assets/img/favicon.png">
+    <meta property="og:description" content="
+最近在研究学习JavaScript的模板引擎的实现原理，读到Krasimir Tsonev的这篇介绍JS模板引擎实现原理的文章，对于新手很是受用，因此翻译过来。
+
+
+原文链接：JavaScript template engine in just 20 lines
+">
+    
+
+    
+        <meta property="article:published_time" content="Thu Feb 09 2017 20:59:14 GMT+0800">
+        <meta property="article:modified_time" content="Sat Oct 27 2018 10:46:24 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html",
+    "headline": "简易Javascript 模板引擎",
+    "datePublished": "Thu Feb 09 2017 20:59:14 GMT+0800",
+    "dateModified": "Sat Oct 27 2018 10:46:24 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "Hanks",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/assets/img/avatar.png"
+        },
+        "description": "Stay curious and keep learning"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Hanks&#39; blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/assets/img/favicon.png"
+        }
+    },
+    "keywords": "null",
+    "description": "
+最近在研究学习JavaScript的模板引擎的实现原理，读到Krasimir Tsonev的这篇介绍JS模板引擎实现原理的文章，对于新手很是受用，因此翻译过来。
+
+
+原文链接：JavaScript template engine in just 20 lines
+",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                简易Javascript 模板引擎
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/assets/img/avatar.png" width="44px" height="44px" alt="Author Avatar">
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Hanks</strong>
+        <span>Feb 09, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">Read this article on other devices</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC3ElEQVR42u3aQXLjMAwEQP//09kHpGTPgEpWIVunlC1LbF4QYvD6OvJ6YWNjY2NjY2NjYz+S/Yqv/Fff7/mwoODOqycXa8bGxsbemp0s6/1CW/zVe6+ecMOasbGxsQ9gv196fn++xPeklTVgY2NjY6+8Jilj7f0ra8bGxsbGfv+4WRuoffKD6jY2Njb2g9krgFljqH3Of+ulYWNjYz+enYemz/n7V/NtbGxs7Aez22sWCSSl6K4j0OXKsbGxsTdl54VhthErR538jdGvsLGxsTdlJy34tiy1xWnl7Un5xMbGxj6BvTKmk3yeHzCGDaOgBGJjY2Pvys4HItvINolv8y1o20zY2NjY57Dz1lLb3GlLWr7ps0YYNjY29q7slfKQHwzaZlAbKtRNJWxsbOzt2G35aSPY2SjPrFzdMHOKjY2N/afYeRMnudonrGxTflzBxsbGPoGdR7yzV/7cW5LShY2NjX0OOy9XsxigjSWSgHnYVMLGxsbelD0LZWeN+zxayDfihqMINjY29h9kt0XrJ0LfJGzOi+Llu7CxsbG3Zs/C1Lad1DaVkrJXHHuwsbGxN2UnTaKkudM2j9p78uABGxsbG3t2CGmPKElha6OI4iiCjY2NfRi7ZeQtodmo5TA2wMbGxt6U3Q5BzgYi2yNKHjMXm4iNjY19JDsahRmNS658m3+CjY2NfRp7Fqa28W0bOcxGP+tJJWxsbOyt2fnn7XHl3oNKEfRiY2NjH8C+t5C045Wzcvhh07GxsbE3ZbfXSiGZhcTt2FCRb2NjY2Nvwb431s0Dg3xYZ6XIYWNjY5/DnhWttqnUlrFZARs2lbCxsbG3YOdNn7Y9tNIYmjWnsLGxsbHbf/fbw0x7wEjK54fYAxsbGxu7bMe3cXI7QpQflrCxsbHPYeeLzqPcfKynHf1pm1DY2NjYe7NXBiXb8CDfuDwAjsJpbGxs7E3Z51zY2NjY2NjY2NjYj7n+AWnXC23N2IdvAAAAAElFTkSuQmCC">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+        
+            <!-- Busuanzi Views -->
+            <a class="post_share-link" href="#">
+                <li class="mdl-menu__item">
+                    <span id="busuanzi_container_page_pv">
+                        <span id="busuanzi_value_page_pv"></span>&nbsp;Views
+                    </span>
+                </li>
+            </a>
+        
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=简易Javascript 模板引擎&url=https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html&pic=https://github.com/Hankszhang/assets/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=简易Javascript 模板引擎&url=https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html&via=Hanks" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=Hanks&#39; blog&title=简易Javascript 模板引擎&summary=前端之路漫漫，其修远兮，吾将上下而求索&pics=https://github.com/Hankszhang/assets/img/favicon.png&url=https://github.com/Hankszhang/2017/02/09/js-template-engine/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <blockquote>
+<p>最近在研究学习JavaScript的模板引擎的实现原理，读到<a href="https://github.com/krasimir">Krasimir Tsonev</a>的这篇介绍JS模板引擎实现原理的文章，对于新手很是受用，因此翻译过来。</p>
+</blockquote>
+<blockquote>
+<p>原文链接：<a href="http://krasimirtsonev.com/blog/article/Javascript-template-engine-in-just-20-line" target="_blank" rel="noopener">JavaScript template engine in just 20 lines</a></p>
+</blockquote>
+<a id="more"></a>
+<p>我还在忙于开发基于JavaScript的预处理器——<a href="http://krasimirtsonev.com/blog/article/AbsurdJS-fundamentals" target="_blank" rel="noopener"><strong>AbsurdJS</strong></a>, 它最开始仅作为CSS预处理器，后来扩展为CSS/HTML预处理器。简而言之，它可以将JavaScript转换为CSS/HTML。自然的，由于它可以生成HTML，因此可以作为模板引擎使用，即将数据填充到标签中。</p>
+<p>因此，我想写一个简单的模板引擎逻辑，来完美兼容现在的项目。<a href="http://krasimirtsonev.com/blog/article/AbsurdJS-fundamentals" target="_blank" rel="noopener"><strong>AbsurdJS</strong></a>主要作为NodeJS模块来使用，不过有时候也需要在客户端使用。我发现目前还没有引擎能满足这一需求，因为大多数引擎都是基于NodeJS运行环境的，从而很难移植到浏览器运行。我需要一个小巧且用纯JavaScript写的引擎。恰好<a href="http://ejohn.org/" target="_blank" rel="noopener"><strong>John Resig</strong></a>的<a href="http://ejohn.org/blog/javascript-micro-templating/" target="_blank" rel="noopener"><strong>这篇文章</strong></a>中提出的引擎满足我的需求。我对它稍作修改，并减缩到20行代码。研究这段脚本的原理是很有意思的事情。本文中我会一步一步重构这个引擎，以便读者能够理解来自John的绝妙idea。</p>
+<p>首先，我们的模板引擎应该长这样：</p>
+<pre><code class="js">var TemplateEngine = function(tpl, data) {
+    // magic here ...
+}
+var template = &#39;&lt;p&gt;Hello, my name is &lt;%name%&gt;. I\&#39;m &lt;%age%&gt; years old.&lt;/p&gt;&#39;;
+console.log(TemplateEngine(template, {
+    name: &quot;Krasimir&quot;,
+    age: 29
+}));
+</code></pre>
+<p>一个简单的函数，输入参数是<em>tpl</em>模板和<em>data</em>对象。可以猜到，最终我们期望得到的结果应该是：</p>
+<pre><code class="json">&lt;p&gt;Hello, my name is Krasimir. I&#39;m 29 years old.&lt;/p&gt;
+</code></pre>
+<p>首先我们需要获得模板中的动态片段，然后用传入引擎中的真实数据替换它们。我们可以用正则表达式来实现，这不是我的强项，所以欢迎指正并提出更好的正则表达式。</p>
+<pre><code class="js">var re = /&lt;%([^%&gt;]+)?%&gt;/g;
+</code></pre>
+<p>这样，我们会捕获所有以&lt;%开头，以%&gt;结尾的的片段。标志位<em>g</em>表示获取所有的匹配项。接受正则表达式的方法有很多，这里我们需要的是一个元素是字符串的数组，这正是<a href="http://www.w3schools.com/jsref/jsref_regexp_exec.asp" target="_blank" rel="noopener"><em>exec</em></a>能干的事情。</p>
+<pre><code class="js">var re = /&lt;%([^%&gt;]+)?%&gt;/g;
+var match = re.exec(tpl);
+</code></pre>
+<p>用<em>console.log</em>将<em>match</em>变量打印出来，我们会得到：</p>
+<pre><code class="js">[
+    &quot;&lt;%name%&gt;&quot;,
+    &quot; name &quot;, 
+    index: 21,
+    input: &quot;&lt;p&gt;Hello, my name is &lt;%name%&gt;. I\&#39;m &lt;%age%&gt; years old.&lt;/p&gt;&quot;
+]
+</code></pre>
+<p>现在，我们拿到数据了，但是如上所示，返回的数组仅有一个元素，而我们需要处理所有的匹配项。因此，我们要在上述代码的外面加一个<em>while</em>循环。</p>
+<pre><code class="js">var re = /&lt;%([^%&gt;]+)?%&gt;/g, match;
+while(match = re.exec(tpl)) {
+    console.log(match);
+}
+</code></pre>
+<p>运行上面的代码，可以同时得到&lt;%name%&gt;和&lt;%age%&gt;。</p>
+<p>现在事情开始变得有趣了。我们需要将传入函数的真实数据来替换模板中的占位符。最简单的方法是对模板应用<em>.replace</em>方法。可以这样写：</p>
+<pre><code class="js">var TemplateEngine = function(tpl, data) {
+    var re = /&lt;%([^%&gt;]+)?%&gt;/g, match;
+    while(match = re.exec(tpl)) {
+        tpl = tpl.replace(match[0], data[match[1]])
+    }
+    return tpl;
+}
+</code></pre>
+<p>OK, 这有用，但当然还不够好。我们现在传入的是最简单的对象，所以可以用data[“property”]的方式来取值。但是在实际应用中，我们可能会遇到复杂的嵌套对象。例如，将我们的数据改为：</p>
+<pre><code class="js">{
+    name: &quot;Krasimir Tsonev&quot;,
+    profile: { age: 29 }
+}
+</code></pre>
+<p>现在我们的引擎失效了，因为当输入&lt;%profile.age%&gt;时，我们会得到data[“profile.age”]，这个值实际上是<em>undefined</em>。因此，我们需要修改引擎的实现。在这种情况下<em>.replace</em>方法无法胜任。最好的方式是在&lt;%和%&gt;之间放置JavaScript代码，最好能够根据传入的数据来执行。例如：</p>
+<pre><code class="js">var template = &#39;&lt;p&gt;Hello, my name is &lt;%this.name%&gt;. I\&#39;m &lt;%this.profile.age%&gt; years old.&lt;/p&gt;&#39;;
+</code></pre>
+<p>该怎么实现呢？John用了<em>new Function</em>语法，也即以字符串为参数来创建函数。我们先看一个简单的例子：</p>
+<pre><code class="js">var fn = new Function(&quot;arg&quot;, &quot;console.log(arg + 1);&quot;);
+fn(2); // outputs 3
+</code></pre>
+<p>fn实际上是一个接收一个参数的函数，它的函数体是console.log(arg+1)；换句话说，上述代码等同于：</p>
+<pre><code class="js">var fn = function(arg) {
+    console.log(arg + 1);
+}
+fn(2); // outputs 3
+</code></pre>
+<p>通过这种方式，我们可以通过简单字符串来定义一个函数的参数和函数体。这正好满足我们的需求。但是在定义这样一个函数之前，我们需要构建函数的函数体。函数最终应返回编译好的模板。用之前的例子的话，编译好的模板应该是这样的形式：</p>
+<pre><code class="js">return 
+&quot;&lt;p&gt;Hello, my name is &quot; + 
+this.name + 
+&quot;. I\&#39;m &quot; + 
+this.profile.age + 
+&quot; years old.&lt;/p&gt;&quot;;
+</code></pre>
+<p>我们需要将模板分成普通文本和有意义的JavaScript代码。如上所示，我们可以通过简单的拼接来得到想要的结果。但是，这种方法不能100%满足要求。因为我们传入的可执行的JavaScript代码可能会做循环，例如：</p>
+<pre><code class="js">var template = 
+&#39;My skills:&#39; + 
+&#39;&lt;%for(var index in this.skills) {%>' + 
+'<a href><%this.skills[index]%></%this.skills[index]%></a>' +
+'<%}%&gt;&#39;; < code></%}%&gt;&#39;;></code></pre>
+<p>如果用拼接，结果会是这样：</p>
+<pre><code class="js">return
+&#39;My skills:&#39; + 
+for(var index in this.skills) { +
+&#39;&lt;a href=&quot;&quot;&gt;&#39; + 
+this.skills[index] +
+&#39;&lt;/a&gt;&#39; +
+}
+</code></pre>
+<p>毫无疑问，这肯定会报错。因此我决定采用John的文章中所用的方法：将所有的字符串片段存入一个数组中，最后再将数组的元素用join方法拼接起来。</p>
+<pre><code class="js">var r = [];
+r.push(&#39;My skills:&#39;); 
+for(var index in this.skills) {
+r.push(&#39;&lt;a href=&quot;&quot;&gt;&#39;);
+r.push(this.skills[index]);
+r.push(&#39;&lt;/a&gt;&#39;);
+}
+return r.join(&#39;&#39;);
+</code></pre>
+<p>下一步，我们需要收集自定义函数的不同行。我们已经从模板中获得了一些信息。我们知道占位符的内容及其位置。所以通过使用一个辅助变量（<em>cursor</em>）我们就能能够得到预期的结果。</p>
+<pre><code class="js">var TemplateEngine = function(tpl, data) {
+    var re = /&lt;%([^%&gt;]+)?%&gt;/g,
+        code = &#39;var r=[];\n&#39;,
+        cursor = 0, match;
+    var add = function(line) {
+        code += &#39;r.push(&quot;&#39; + line.replace(/&quot;/g, &#39;\\&quot;&#39;) + &#39;&quot;);\n&#39;;
+    }
+    while(match = re.exec(tpl)) {
+        add(tpl.slice(cursor, match.index));
+        add(match[1]);
+        cursor = match.index + match[0].length;
+    }
+    add(tpl.substr(cursor, tpl.length - cursor));
+    code += &#39;return r.join(&quot;&quot;);&#39;; // &lt;-- return the result
+    console.log(code);
+    return tpl;
+}
+var template = &#39;&lt;p&gt;Hello, my name is &lt;%this.name%&gt;. I\&#39;m &lt;%this.profile.age%&gt; years old.&lt;/p&gt;&#39;;
+console.log(TemplateEngine(template, {
+    name: &quot;Krasimir Tsonev&quot;,
+    profile: { age: 29 }
+}));
+</code></pre>
+<p>变量<em>code</em>用于保存函数的函数体。它以数组的定义开始，而<em>cursor</em>表示现在在模板中所处的位置。我们需要这样一个变量来遍历整个字符串并跳过数据片段。这里使用了一个<em>add</em>函数，它的作用是将代码行添加到<em>code</em>变量的末尾。这里有一个坑要注意：我们需要对双引号转义，否则生成的脚本会是非法的。运行整个实例，我们可以在控制台看到：</p>
+<pre><code class="js">var r=[];
+r.push(&quot;&lt;p&gt;Hello, my name is &quot;);
+r.push(&quot;this.name&quot;);
+r.push(&quot;. I&#39;m &quot;);
+r.push(&quot;this.profile.age&quot;);
+return r.join(&quot;&quot;);
+</code></pre>
+<p>呃… 与我们预期的不一致。这里的<em>this.name</em>和<em>this.profile</em>不应该加引号。对<em>add</em>方法做一点修改可以解决这个bug：</p>
+<pre><code class="js">var add = function(line, js) {
+    js? code += &#39;r.push(&#39; + line + &#39;);\n&#39; :
+        code += &#39;r.push(&quot;&#39; + line.replace(/&quot;/g, &#39;\\&quot;&#39;) + &#39;&quot;);\n&#39;;
+}
+var match;
+while(match = re.exec(tpl)) {
+    add(tpl.slice(cursor, match.index));
+    add(match[1], true); // &lt;-- say that this is actually valid js
+    cursor = match.index + match[0].length;
+}
+</code></pre>
+<p>传入占位符的内容的同时传入一个布尔变量（表示传入的字符串是否是合法的js代码）。现在可以生成正确的函数体了。</p>
+<pre><code class="js">var r=[];
+r.push(&quot;&lt;p&gt;Hello, my name is &quot;);
+r.push(this.name);
+r.push(&quot;. I&#39;m &quot;);
+r.push(this.profile.age);
+return r.join(&quot;&quot;);
+</code></pre>
+<p>现在我们要做的是创建这个函数并执行它，在模板引擎的末尾，我们不返回<em>tpl</em>，而是返回这个函数：</p>
+<pre><code class="js">return new Function(code.replace(/[\r\t\n]/g, &#39;&#39;)).apply(data);
+</code></pre>
+<p>我们甚至不需要给这个函数传任何参数，我们用<em>apply</em>方法来调用它。它会自动设置作用域，因此我们用的<em>this.name</em>可以生效，这里的<em>this</em>实际上指向传入的data。</p>
+<p>我们马上就要完成了。还有最后一件事，我们需要支持更复杂的操作，如：if/else语句和循环。仍用上面都的例子并应用目前为止的代码。</p>
+<pre><code class="js">var template = 
+&#39;My skills:&#39; + 
+&#39;&lt;%for(var index in this.skills) {%>' + 
+'<a href="#"><%this.skills[index]%></%this.skills[index]%></a>' +
+'<%}%&gt;&#39;; console.log(templateengine(template, { skills: [&quot;js&quot;, &quot;html&quot;, &quot;css&quot;] })); < code></%}%&gt;&#39;;></code></pre>
+<p>结果会报错<em>Uncaught SyntaxError: Unexpected token for</em>。通过调试并输出<em>code</em>变量，我们就能发现问题所在。</p>
+<pre><code class="js">var r=[];
+r.push(&quot;My skills:&quot;);
+r.push(for(var index in this.skills) {);
+r.push(&quot;&lt;a href=\&quot;\&quot;&gt;&quot;);
+r.push(this.skills[index]);
+r.push(&quot;&lt;/a&gt;&quot;);
+r.push(});
+r.push(&quot;&quot;);
+return r.join(&quot;&quot;);
+</code></pre>
+<p>包含<em>for</em>循环的代码行不应该push到数组中，而应该放在脚本内执行。因此我们需要在给<em>code</em>添加内容之前多做一步检查。</p>
+<pre><code class="js">var re = /&lt;%([^%&gt;]+)?%&gt;/g,
+    reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,
+    code = &#39;var r=[];\n&#39;,
+    cursor = 0;
+var add = function(line, js) {
+    js? code += line.match(reExp) ? line + &#39;\n&#39; : &#39;r.push(&#39; + line + &#39;);\n&#39; :
+        code += &#39;r.push(&quot;&#39; + line.replace(/&quot;/g, &#39;\\&quot;&#39;) + &#39;&quot;);\n&#39;;
+}
+</code></pre>
+<p>引入了一个新的正则表达式，它告诉我们如果js代码以<em>if</em>、<em>for</em>、<em>else</em>、<em>switch</em>、<em>case</em>、<em>break</em>、<em>{</em>或<em>}</em>开始的话，则单纯的将这一行加到<em>code</em>末尾，否则则在外面包一层push语句。结果如下：</p>
+<pre><code class="js">var r=[];
+r.push(&quot;My skills:&quot;);
+for(var index in this.skills) {
+r.push(&quot;&lt;a href=\&quot;#\&quot;&gt;&quot;);
+r.push(this.skills[index]);
+r.push(&quot;&lt;/a&gt;&quot;);
+}
+r.push(&quot;&quot;);
+return r.join(&quot;&quot;);
+</code></pre>
+<p>现在，所有模板都能正确编译了。</p>
+<pre><code class="js">My skills:&lt;a href=&quot;#&quot;&gt;js&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;html&lt;/a&gt;&lt;a href=&quot;#&quot;&gt;css&lt;/a&gt;
+</code></pre>
+<p>实际上最后一步的修正使我们的引擎变得更加强大。我们可以直接在模板中使用复杂的逻辑。例如：</p>
+<pre><code class="js">var template = 
+&#39;My skills:&#39; + 
+&#39;&lt;%if(this.showSkills) {%>' +
+    '<%for(var index in this.skills) {%>' + 
+    '<a href="#"><%this.skills[index]%></%this.skills[index]%></a>' +
+    '<%}%&gt;&#39; + &#39;&lt;%} else {%>' +
+    '<p>none</p>' +
+'<%}%&gt;&#39;; console.log(templateengine(template, { skills: [&quot;js&quot;, &quot;html&quot;, &quot;css&quot;], showskills: true })); < code></%}%&gt;&#39;;></%}%&gt;&#39;></%for(var></code></pre>
+<p>我对代码做了一些细小的优化，<a href="/assets/demo/TemplateEngine.js">最终版</a>如下所示：</p>
+<pre><code class="js">var TemplateEngine = function(html, options) {
+    var re = /&lt;%([^%&gt;]+)?%&gt;/g, reExp = /(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g, code = &#39;var r=[];\n&#39;, cursor = 0, match;
+    var add = function(line, js) {
+        js? (code += line.match(reExp) ? line + &#39;\n&#39; : &#39;r.push(&#39; + line + &#39;);\n&#39;) :
+            (code += line != &#39;&#39; ? &#39;r.push(&quot;&#39; + line.replace(/&quot;/g, &#39;\\&quot;&#39;) + &#39;&quot;);\n&#39; : &#39;&#39;);
+        return add;
+    }
+    while(match = re.exec(html)) {
+        add(html.slice(cursor, match.index))(match[1], true);
+        cursor = match.index + match[0].length;
+    }
+    add(html.substr(cursor, html.length - cursor));
+    code += &#39;return r.join(&quot;&quot;);&#39;;
+    return new Function(code.replace(/[\r\t\n]/g, &#39;&#39;)).apply(options);
+}
+</code></pre>
+<p>它仅有15行！！！</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+                    
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/02/09/js-create-object/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/02/09/preface/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/assets/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/assets/img/avatar.png" alt="Hanks's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        hankszhang918@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="mailto: hankszhang918@gmail.com" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Development/">Development<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Experience/">Experience<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Frontend/">Frontend<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/Rust/">Rust<span class="sidebar_archives-count">1</span></a>
+            </li></ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">12</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+
+<!-- Help & Support -->
+<!--
+
+    <a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.help
+        <span class="mdl-button__ripple-container">
+          <span class="mdl-ripple"></span>
+        </span>
+      </div>
+    </a>
+
+-->
+
+<!-- Feedback -->
+<!--
+
+    <a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.feedback
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Hankszhang" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+        <a href="https://www.zhihu.com/people/hanks-zhang-8" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-zhihu">
+                <span class="visuallyhidden">Zhihu</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>Hanks' blog
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?wgjW/HuQG9JDgvPDPoRAng==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script>lsloader.load("sm_js","/js/smoothscroll.js?tNQK2Tw2SUL8a1Scn/Mgew==", true)</script>
+    
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+    
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
+        
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

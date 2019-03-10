@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+    <link rel="dns-prefetch" href="https://busuanzi.ibruce.info">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            项目中的代码规范检查 | 
+        
+        Hanks&#39; blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/assets/img/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="
+在团队项目开发中，每个人有不同的编程习惯，包括使用不同的缩进、换行、注释等等，当团队人员逐渐增多之后，代码就会变得越来越来杂乱，这无形中给团队合作增加了困难。因此，制订一套团队的代码规范十分有必要，这套规范应该包含代码风格规范、commit规范、变量术语规范等几个方面。当然有了规范之后，为保证大家严格按照规范来进行开发，需要设置一定的“关卡”来校验这些规范，只有符合规范的代码才能通过。本文介绍利用ESlint+Git来控制项目代码的质量。
+">
+    <meta name="keywords" content="null">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/tomorrow.min.css?HIeSQl6y3t6jBuxHvLPGSA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+            
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?ezyEvm8ST5CGfpA+kFFi1g==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Hanks&#39; blog">
+    <meta name="msapplication-starturl" content="https://github.com/Hankszhang/2017/07/31/project-specification/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Hanks&#39; blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/assets/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://github.com/Hankszhang/2017/07/31/project-specification/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="项目中的代码规范检查 | Hanks&#39; blog">
+    <meta property="og:image" content="/assets/img/favicon.png">
+    <meta property="og:description" content="
+在团队项目开发中，每个人有不同的编程习惯，包括使用不同的缩进、换行、注释等等，当团队人员逐渐增多之后，代码就会变得越来越来杂乱，这无形中给团队合作增加了困难。因此，制订一套团队的代码规范十分有必要，这套规范应该包含代码风格规范、commit规范、变量术语规范等几个方面。当然有了规范之后，为保证大家严格按照规范来进行开发，需要设置一定的“关卡”来校验这些规范，只有符合规范的代码才能通过。本文介绍利用ESlint+Git来控制项目代码的质量。
+">
+    
+
+    
+        <meta property="article:published_time" content="Mon Jul 31 2017 19:49:03 GMT+0800">
+        <meta property="article:modified_time" content="Sat Oct 27 2018 10:46:24 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="https://github.com/Hankszhang/2017/07/31/project-specification/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://github.com/Hankszhang/2017/07/31/project-specification/index.html",
+    "headline": "项目中的代码规范检查",
+    "datePublished": "Mon Jul 31 2017 19:49:03 GMT+0800",
+    "dateModified": "Sat Oct 27 2018 10:46:24 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "Hanks",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/assets/img/avatar.png"
+        },
+        "description": "Stay curious and keep learning"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Hanks&#39; blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/assets/img/favicon.png"
+        }
+    },
+    "keywords": "null",
+    "description": "
+在团队项目开发中，每个人有不同的编程习惯，包括使用不同的缩进、换行、注释等等，当团队人员逐渐增多之后，代码就会变得越来越来杂乱，这无形中给团队合作增加了困难。因此，制订一套团队的代码规范十分有必要，这套规范应该包含代码风格规范、commit规范、变量术语规范等几个方面。当然有了规范之后，为保证大家严格按照规范来进行开发，需要设置一定的“关卡”来校验这些规范，只有符合规范的代码才能通过。本文介绍利用ESlint+Git来控制项目代码的质量。
+",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn" class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ESlint简介"><span class="post-toc-number">1.</span> <span class="post-toc-text">ESlint简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Git-hooks"><span class="post-toc-number">2.</span> <span class="post-toc-text">Git hooks</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码检查"><span class="post-toc-number">3.</span> <span class="post-toc-text">代码检查</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#代码格式化"><span class="post-toc-number">4.</span> <span class="post-toc-text">代码格式化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#commit信息校验"><span class="post-toc-number">5.</span> <span class="post-toc-text">commit信息校验</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#git-commit-格式规范"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">git commit 格式规范</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结语"><span class="post-toc-number">6.</span> <span class="post-toc-text">结语</span></a></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                项目中的代码规范检查
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/assets/img/avatar.png" width="44px" height="44px" alt="Author Avatar">
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Hanks</strong>
+        <span>Jul 31, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">Read this article on other devices</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC2ElEQVR42u3aUVIrMQwEwNz/0rwDUIEZKY9K7N4vKpU1bn0wWPLj68rngY2NjY2NjY2Njf2W7Ef8fH/r+8/PPvn5rfa3DPeMjY2NfTT7lz/9AePZhpIyJQXarICNjY19D7vddBJdeWmebT0JtqQ02NjY2NhtFCWHh1lpsLGxsbH37DzGkubRrIjY2NjY2JsWTxtXbQnyo8gf9dKwsbGx356dD03f5+c/nW9jY2NjvzG7fWbXa2YD3Ta0ftk5NjY29qHsPBgSfHtc+bms+Xeigw02Njb2oeykxT+LqHxDyZqzcS82Njb2PexNQ2cWaUk0zgK1biphY2NjH8FuhwF5yylvKs1idTjoxcbGxj6O3baZ2mK1Bc1j8mWDXmxsbOyPZe//6W/Ht5vhwWb0i42NjX02e9Zw/x8rzAI1aW9hY2Njn8pOWvb58SA/rsyiLo/YetCLjY2N/bHs2ZEjv17TDhXaIhbDZmxsbOxD2W08bIIkj6t2tZflNjY2NvbHsmdHiPw77WGj3UP0OTY2Nvah7KS5PxvZ5sXaFC4fOWBjY2Pfw86bRPlxYtMq2gQtNjY29j3szfWa/N28GZQfMIohBDY2NvY17Pyazibe2ks5+3EvNjY29g3sJAzyTbRB1Q4h8sjExsbGvoG9+SQJuXycsI+uejyAjY2NfRD7VW362VB2dmhZNZWwsbGxj2O3IZE36F81cpi1wLCxsbGxZ9vNjx9tyynHY2NjY9/MzkvQhkoeS4/4iWISGxsb+1B2+7Rj3f3VnzYIn34TGxsb+1B2GxJ5g37VABoVqG4qYWNjYx/ETkJrPx5ICtqun6+DjY2NfQM7PzDkn2yucuYRGwUqNjY2NnYZePnWZ4eNNvCwsbGxsWeD4fZqTn7YyCMQGxsb+x52suim0ZO0mdrV/qiXho2Njf327LZx0454Z5c48wFw9C42Njb2oex7HmxsbGxsbGxsbOy3ef4BuLnild3DHoIAAAAASUVORK5CYII=">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+        
+            <!-- Busuanzi Views -->
+            <a class="post_share-link" href="#">
+                <li class="mdl-menu__item">
+                    <span id="busuanzi_container_page_pv">
+                        <span id="busuanzi_value_page_pv"></span>&nbsp;Views
+                    </span>
+                </li>
+            </a>
+        
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=项目中的代码规范检查&url=https://github.com/Hankszhang/2017/07/31/project-specification/index.html&pic=https://github.com/Hankszhang/assets/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=项目中的代码规范检查&url=https://github.com/Hankszhang/2017/07/31/project-specification/index.html&via=Hanks" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/Hankszhang/2017/07/31/project-specification/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=https://github.com/Hankszhang/2017/07/31/project-specification/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=Hanks&#39; blog&title=项目中的代码规范检查&summary=前端之路漫漫，其修远兮，吾将上下而求索&pics=https://github.com/Hankszhang/assets/img/favicon.png&url=https://github.com/Hankszhang/2017/07/31/project-specification/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <blockquote>
+<p>在团队项目开发中，每个人有不同的编程习惯，包括使用不同的缩进、换行、注释等等，当团队人员逐渐增多之后，代码就会变得越来越来杂乱，这无形中给团队合作增加了困难。因此，制订一套团队的代码规范十分有必要，这套规范应该包含代码风格规范、commit规范、变量术语规范等几个方面。当然有了规范之后，为保证大家严格按照规范来进行开发，需要设置一定的“关卡”来校验这些规范，只有符合规范的代码才能通过。本文介绍利用ESlint+Git来控制项目代码的质量。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="ESlint简介"><a href="#ESlint简介" class="headerlink" title="ESlint简介"></a>ESlint简介</h2><p><a href="http://eslint.org/" target="_blank" rel="noopener">ESlint</a>和<a href="https://git-scm.com/docs" target="_blank" rel="noopener">Git</a>是实现这套方案的核心工具。</p>
+<p>ESlint是一个插件化的JS和JSX代码检查工具，它可以用于检查常见的JavaScript语法错误，也可以进行代码风格检查。<br>通过命令：<code>$ npm install --save-dev eslint</code>在项目中安装好eslint，我们可以根据自己的项目需求编写自己的ESlint配置文件<code>.eslintrc</code>，将此文件至于项目根目录即可。<br>一个简单的ESlint配置如下：</p>
+<pre><code class="json">{
+    &quot;env&quot;: {
+        &quot;mocha&quot;: true,
+        &quot;es6&quot;: true,
+        &quot;node&quot;: true
+    },
+    &quot;globals&quot;: {
+        &quot;document&quot;: false,
+        &quot;navigator&quot;: false,
+        &quot;window&quot;: true
+    },
+    &quot;plugins&quot;: [&quot;vue&quot;],
+    &quot;parserOptions&quot;: {
+        &quot;ecmaVersion&quot;: 6,
+        &quot;sourceType&quot;: &quot;module&quot;,
+        &quot;ecmaFeatures&quot;: {
+            &quot;experimentalObjectRestSpread&quot;: true,
+            &quot;jsx&quot;: true
+        }
+    },
+    &quot;rules&quot;: {
+        &quot;accessor-pairs&quot;: 2,
+        &quot;array-bracket-spacing&quot;: [2, &quot;never&quot;],
+        &quot;arrow-spacing&quot;: [2, { &quot;before&quot;: true, &quot;after&quot;: true }],
+        &quot;brace-style&quot;: [1, &quot;stroustrup&quot;, {}],
+        &quot;curly&quot;: [2, &quot;multi-line&quot;],
+        &quot;keyword-spacing&quot;: 2,
+        &quot;max-depth&quot;: [1, 6],
+        &quot;max-len&quot;: [2, 120, 4, {
+            &quot;ignoreUrls&quot;: true,
+            &quot;ignoreComments&quot;: true,
+            &quot;ignorePattern&quot;: &quot;\\+ [\\w\\W]+&gt;&#39;&quot;
+        }],
+    }
+}
+</code></pre>
+<p>具体的配置规则请参考<a href="http://eslint.org/docs/user-guide/configuring" target="_blank" rel="noopener">官方配置文档</a>，这里不再赘述。</p>
+<p>配置好ESlint之后，我们有两种方式来使用它，一种是通过命令行的方式：<code>$ eslint index.js</code>，这个命令会根据配置的eslint规则对index.js检查，如果index.jx中有不符合规则的地方，会在控制台输出错误提示（有<code>error</code>/<code>warning</code>两种）及错误所处的文件位置。一般不推荐使用这种方式，因为它只不过是一种补救错误的方法，而我们希望在编码者出错时能够立即提示错误。幸好，我们可以在编辑器中用插件与eslint搭配来满足实时提示错误的需求。</p>
+<p>我自己喜欢使用<a href="https://atom.io/" target="_blank" rel="noopener">Atom</a>进行编码，以Atom为例，在Atom中安装<a href="https://atom.io/packages/linter" target="_blank" rel="noopener">linter</a>和<a href="https://atom.io/packages/linter-eslint" target="_blank" rel="noopener">linter-eslint</a>插件，eslint就会实时检查当前文件中的代码是否符合规范，on the fly!</p>
+<h2 id="Git-hooks"><a href="#Git-hooks" class="headerlink" title="Git hooks"></a>Git hooks</h2><p>像其他的版本控制工具一样，git也提供了“钩子”功能——<a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks" target="_blank" rel="noopener">Git hooks</a>，用于在特定的重要动作发生时触发自定义脚本。git有客户端钩子和服务端钩子两种，客户端钩子用于提交、合并等场合，而服务端钩子则用于诸如接收push request、身份校验等场景。我们这里主要关注客户端钩子。</p>
+<ul>
+<li><code>pre-commit</code>钩子：在键入提交信息前运行,可以在提交前对代码风格进行校验,如果验证不通过，git将放弃刺激提交。当然，我们可以通过<code>git commit --no-verify</code>来跳过这个步骤</li>
+<li><code>commit-msg</code>钩子：该钩子接收存有当前提交信息的临时文件作为参数，可用于检查项目状态或提交信息</li>
+</ul>
+<p>利用上述的两个钩子，就可以在执行commit的时候执行我们的自定义脚本。</p>
+<p>推荐使用<a href="https://github.com/typicode/husky">husky</a>来管理hook脚本，该工具跨平台支持所有的git hooks，且可以很方便的管理自定义脚本。</p>
+<h2 id="代码检查"><a href="#代码检查" class="headerlink" title="代码检查"></a>代码检查</h2><p>使用eslint检查代码很简单，直接使用<code>eslint</code>指令即可，如执行：</p>
+<pre><code class="javascript">eslint --quiet index.js
+</code></pre>
+<p>当然，该命令的参数也支持多文件名和文件夹，更是支持<code>*</code>匹配模式，因此我们可以在此基础上自定义自己的调用命令，这个稍后再介绍。</p>
+<p>需要注意的是，在型项目中往往会有成百上千个文件，如果每次提交前都对所有的文件进行检查是效率很低的。因此，我们只对每次提交时修改过的文件进行检查，也就是只检查当前为<code>staged</code>状态的文件。</p>
+<p><code>git diff HEAD --name-only</code>指令可以获得当前处于<code>staged</code>状态的所有文件的文件名(包含相对路径)，之后再调用<code>eslint</code>命令就能对实现commit前对代码文件袋呃检查，如果有某一个文件没有通过检查，则校验失败，当前<code>commit</code>也会被中止。</p>
+<p><a href="https://github.com/okonet/lint-staged">lint-staged</a>可以帮助我们达到上述的目的，它的优点是非常友好，校验不通过的文件会高亮输出错误，一目了然。而且，该插件不仅支持js的检查，也支持css/scss的检查。只需要在package.json文件中配置好被检查的文件目录及对应的检查工具就可以了，如：</p>
+<pre><code class="json">{
+    &quot;name&quot;: &quot;xxxx&quot;,
+    &quot;version&quot;: &quot;1.0.0&quot;,
+    &quot;description&quot;: &quot;A Vue.js project&quot;,
+    &quot;scripts&quot;: {
+        &quot;precommit&quot;: &quot;lint-staged&quot;
+    },
+    &quot;lint-staged&quot;: {
+        &quot;build/**/*&quot;: &quot;eslint&quot;,
+        &quot;config/**/*&quot;: &quot;eslint&quot;,
+        &quot;src/**/*.{js,vue}&quot;: &quot;eslint&quot;
+    }
+}
+</code></pre>
+<p>配置好后，每次在执行<code>git commit</code>时，都会对lint-staged中所指定的目录下处于<code>staged</code>状态的文件执行eslint检查。</p>
+<h2 id="代码格式化"><a href="#代码格式化" class="headerlink" title="代码格式化"></a>代码格式化</h2><p>现在，我们已经可以根据eslint rules对代码进行检查，但是仍需要手动定位错误所在的文件及其位置。毕竟码农都是”懒人”，那么能不能更进一步，“一键”修复错误呢？</p>
+<p>调研发现，已有一个强大且成熟的工具——<a href="https://github.com/prettier/prettier">prettier</a>可以实现自动修复，但是美中不足的是它只能根据默认的规则（有少数自己自定义配置项）来格式化代码，而不支持自定义的eslint规则。</p>
+<p>查阅eslint的官方文档，惊喜的发现eslint有一个<code>--fix</code>参数，在调用<code>eslint</code>命令执行检查时加上这个参数，就会自动地尽可能的修复检查错误。利用这个功能，就可以编写一个脚本来处理不同参数下如何自动修复错误的问题了。先上代码：</p>
+<p>pretty.js</p>
+<pre><code class="javascript">#!/usr/bin/env node
+
+const child_process = require(&#39;child_process&#39;);
+const program = require(&#39;commander&#39;);
+const sgf = require(&quot;staged-git-files&quot;);
+
+const argv = process.argv;
+program
+  .version(&#39;0.1.0&#39;)
+  .usage(&#39;npm run pretty [-option] &lt;value&gt;&#39;)
+  .option(&#39;-s, --staged&#39;, &#39;Pretty staged js &amp; vue files&#39;)
+  .option(&#39;-a, --all&#39;, &#39;pretty all js &amp; vue files&#39;)
+  .option(&#39;-f, --files [files]&#39;, &#39;pretty file by name&#39;)
+  .option(&#39;-d, --directory [directory]&#39;, &#39;pretty files by directory&#39;)
+  .on(&#39;--help&#39;, () =&gt; {
+      console.log(&#39;  Examples:\n&#39;);
+      console.log(&#39;     npm run pretty -- -s&#39;);
+      console.log(&#39;     npm run pretty -- -a&#39;);
+      console.log(&#39;     npm run pretty -- -f src/index.js&#39;);
+      console.log(&#39;     npm run pretty -- -d packages/date-picker/src\n&#39;);
+  })
+  .parse(argv);
+
+if (argv.length === 2) {
+    // 未传入参数则输出帮助文档
+    program.help();
+}
+if(program.staged) {
+    // get staged files
+    // res = {
+    //     filename: &#39;xxxxx&#39;,
+    //     status: &#39;ADDED&#39;
+    // }
+    sgf((err, res) =&gt; {
+        if (err) {
+            console.error(err);
+            return;
+        }
+        let files = res.filter((item) =&gt; {
+            return item.filename.search(/.js$|.vue$/) !== -1;
+        }).map((file) =&gt; {
+            return file.filename;
+        });
+        fileStr = files.join(&#39; &#39;);
+
+        console.log(&#39;Prettying staged js &amp; vue files in the project:&#39;);
+        child_process.exec(`eslint --fix --quiet ${fileStr}`, (err, stdout, stderr) =&gt; {
+            console.log(stdout);
+            console.log(&#39;Pretty by eslint commpleted\n&#39;);
+        });
+    });
+}
+
+if (program.All) {
+    console.log(&#39;Prettying all js &amp; vue files in the project:&#39;);
+    child_process.exec(`eslint --fix --quiet --ext .js,.vue src`, (err, stdout, stderr) =&gt; {
+        console.log(stdout);
+        console.log(&#39;Pretty by eslint commpleted\n&#39;);
+    });
+}
+
+if(program.files) {
+    if (argv.length === 3) {
+        program.help();
+    }
+    console.log(&#39;Prettying file(s) by name:&#39;);
+    child_process.exec(`eslint --fix --quiet ${program.files}`, (err, stdout, stderr) =&gt; {
+        console.log(stdout);
+        console.log(&#39;Pretty by eslint commpleted\n&#39;);
+    });
+}
+
+if(program.directory) {
+    if (argv.length === 3) {
+        program.help();
+    }
+    console.log(&#39;Prettying file by directory:&#39;);
+    child_process.exec(`eslint --fix --quiet ${program.directory}/**/*.{js,vue}`, (err, stdout, stderr) =&gt; {
+        console.log(stdout);
+        console.log(&#39;Pretty by eslint commpleted\n&#39;);
+    });
+}
+</code></pre>
+<p>这里使用了<a href="https://github.com/tj/commander">commander</a>，以便从命令行接收参数并自动生成帮助文档。上述代码定义了4个参数：<code>staged</code>、<code>all</code>、<code>files</code>和<code>directory</code>，分别用于格式化<code>处于staged状态的文件</code>、<code>项目中所有的文件</code>、<code>参数指定的文件</code>以及<code>指定目录内的文件</code>，这里只对项目中的js和vue文件做检查。<br>这里使用了node的<a href="https://nodejs.org/api/child_process.html" target="_blank" rel="noopener"><code>child_process</code>特性</a>，在脚本内新建一个子进程去处理格式化任务。</p>
+<p>调用脚本时，如果未正确传入参数，则用<code>program.help()</code>输出帮助文档。<br>可以在package.json中配置一个<code>pretty</code>命令来执行脚本，如：</p>
+<pre><code class="json">{
+    &quot;scripts&quot;: {
+        &quot;pretty&quot;: &quot;node pretty.js&quot;
+    }
+}
+</code></pre>
+<p>有了如上的配置，就可以在命令行中用<code>npm run pretty</code>命令来调用脚本了。根据传入的不同参数和参数值，调用<code>eslint --fix</code>执行不同的格式化任务，达到”一键美颜“的目标！</p>
+<p><strong>注意</strong>： npm run 后面的参数只能传给run后面跟的脚本本身，如这里如果执行<code>npm run pretty -a</code>，参数<code>a</code>只能传递给<code>pretty</code>，等效于执行<code>node pretty.js -a</code>，<br>这样在pretty.js内部就拿不到参数<code>a</code>。在<code>npm run</code>命令的参数前加上<code>--</code>，也即：<code>npm run pretty -- -a</code>，就可以将命令行的参数传入实际被执行的脚本（pretty.js）了。</p>
+<h2 id="commit信息校验"><a href="#commit信息校验" class="headerlink" title="commit信息校验"></a>commit信息校验</h2><p>规范化的commit信息可以：</p>
+<ul>
+<li>方便浏览定位日志记录</li>
+<li>自动生成changelog</li>
+</ul>
+<p>如上文所述，我们可以在<code>commit-msg</code>钩子中来校验commit消息，如检查输入的commit信息是否符合预定义的格式，字符是不是超过预定长度等。</p>
+<h3 id="git-commit-格式规范"><a href="#git-commit-格式规范" class="headerlink" title="git commit 格式规范"></a>git commit 格式规范</h3><pre><code class="javascript">git commit -m &#39;&lt;type&gt;(scope): &lt;detail&gt;&#39;
+</code></pre>
+<p>示例：</p>
+<pre><code class="javascript">git commit -m &#39;feature(ivr): change color of svg node&#39;
+</code></pre>
+<ol>
+<li><p><code>type</code>：<font color="red">本次commit的类别</font></p>
+<ul>
+<li>feature：新功能</li>
+<li>fix：修补bug</li>
+<li>doc：文档</li>
+<li>style： 格式（不影响代码运行的变动）</li>
+<li>refactor：重构（即不是新增功能，也不是修改bug的代码变动）</li>
+<li>test：增加测试</li>
+<li>chore：构建过程或辅助工具的变动</li>
+</ul>
+</li>
+<li><p><code>scope</code>：<font color="red">本次commit所属的需求名或影响范围</font></p>
+</li>
+<li><p><code>detail</code>：<font color="red">本次commit的简短描述</font></p>
+<ul>
+<li>不超过100个字符</li>
+<li>以动词开头，使用现在时，如change、fix、remove等</li>
+<li>首字母小写</li>
+<li>结尾不加句号（.）</li>
+</ul>
+</li>
+</ol>
+<p>这里我们使用<a href="https://github.com/conventional-changelog/validate-commit-msg">validate-commit-msg</a>来配置上述的git commit规范。在项目根目录添加<code>.vcmrc</code>文件：</p>
+<pre><code class="json">{
+  &quot;types&quot;: [&quot;feature&quot;, &quot;fix&quot;, &quot;doc&quot;, &quot;style&quot;, &quot;refactor&quot;, &quot;test&quot;, &quot;chore&quot;, &quot;revert&quot;],
+  &quot;scope&quot;: {
+    &quot;required&quot;: true,
+    &quot;allowed&quot;: [&quot;*&quot;],
+    &quot;validate&quot;: false,
+    &quot;multiple&quot;: false
+  },
+  &quot;warnOnFail&quot;: false,
+  &quot;maxSubjectLength&quot;: 100,
+  &quot;subjectPattern&quot;: &quot;.+&quot;,
+  &quot;subjectPatternErrorMsg&quot;: &quot;subject does not match subject pattern!&quot;,
+  &quot;helpMessage&quot;: &quot;\ngit commit规范：\n\nExample：\nfeature(ivr): change color of svg node\n\ntype -- 本次commit的类别，可选值：\n - feature：新功能\n - fix：修补bug\n - doc：文档\n - style： 格式(不影响代码运行的变动)\n - refactor：重构(即不是新增功能，也不是修改bug的代码变动)\n - test：增加测试 \n - chore：构建过程或辅助工具的变动\n\nscope -- 本次commit所属的需求名或影响范围\n\ndetail -- 本次commit的简短描述\n - 不超过50个字符\n - 以动词开头,使用现在时，如change、remove等\n - 首字母小写\n - 结尾不加句号(.)&quot;,
+  &quot;autoFix&quot;: true
+}
+</code></pre>
+<p>如此一来，提交commit的时候都会根据上述模板对commit信息进行校验，如不符合规范则无法提交commit，并提示错误信息。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>简单地利用ESlint和Git，我们就可以完成代码检查、代码自动修复、commit信息校验的工作，团队合作的效率就像一把梭，on the fly！</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2018/02/04/vue-provide-inject/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/07/26/vue-in-staticPage/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/assets/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/assets/img/avatar.png" alt="Hanks's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        hankszhang918@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="mailto: hankszhang918@gmail.com" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Development/">Development<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Experience/">Experience<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Frontend/">Frontend<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/Rust/">Rust<span class="sidebar_archives-count">1</span></a>
+            </li></ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">12</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+
+<!-- Help & Support -->
+<!--
+
+    <a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.help
+        <span class="mdl-button__ripple-container">
+          <span class="mdl-ripple"></span>
+        </span>
+      </div>
+    </a>
+
+-->
+
+<!-- Feedback -->
+<!--
+
+    <a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.feedback
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Hankszhang" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+        <a href="https://www.zhihu.com/people/hanks-zhang-8" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-zhihu">
+                <span class="visuallyhidden">Zhihu</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>Hanks' blog
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?wgjW/HuQG9JDgvPDPoRAng==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script>lsloader.load("sm_js","/js/smoothscroll.js?tNQK2Tw2SUL8a1Scn/Mgew==", true)</script>
+    
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+    
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
+        
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

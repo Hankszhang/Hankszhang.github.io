@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+    <link rel="dns-prefetch" href="https://busuanzi.ibruce.info">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            Vue之自定义指令 | 
+        
+        Hanks&#39; blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/assets/img/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="
+我们都知道在Vue中，代码复用和抽象的主要形式是组件。但是在有些情况下，我们可能仅需要操作一些普通元素，这个时候如果也使用自定义组件会显得很笨重。因此，Vue允许注册自定义指令来实现一些简单的功能。本文将结合自定义指令on-scrollto来看看在Vue中是如何实现自定义指令的。
+">
+    <meta name="keywords" content="null">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/tomorrow.min.css?HIeSQl6y3t6jBuxHvLPGSA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+            
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?ezyEvm8ST5CGfpA+kFFi1g==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Hanks&#39; blog">
+    <meta name="msapplication-starturl" content="https://github.com/Hankszhang/2017/05/07/vue-directives/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Hanks&#39; blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/assets/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://github.com/Hankszhang/2017/05/07/vue-directives/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="Vue之自定义指令 | Hanks&#39; blog">
+    <meta property="og:image" content="/assets/img/favicon.png">
+    <meta property="og:description" content="
+我们都知道在Vue中，代码复用和抽象的主要形式是组件。但是在有些情况下，我们可能仅需要操作一些普通元素，这个时候如果也使用自定义组件会显得很笨重。因此，Vue允许注册自定义指令来实现一些简单的功能。本文将结合自定义指令on-scrollto来看看在Vue中是如何实现自定义指令的。
+">
+    
+
+    
+        <meta property="article:published_time" content="Sun May 07 2017 23:04:54 GMT+0800">
+        <meta property="article:modified_time" content="Sat Oct 27 2018 10:46:24 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="https://github.com/Hankszhang/2017/05/07/vue-directives/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://github.com/Hankszhang/2017/05/07/vue-directives/index.html",
+    "headline": "Vue之自定义指令",
+    "datePublished": "Sun May 07 2017 23:04:54 GMT+0800",
+    "dateModified": "Sat Oct 27 2018 10:46:24 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "Hanks",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/assets/img/avatar.png"
+        },
+        "description": "Stay curious and keep learning"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Hanks&#39; blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/assets/img/favicon.png"
+        }
+    },
+    "keywords": "null",
+    "description": "
+我们都知道在Vue中，代码复用和抽象的主要形式是组件。但是在有些情况下，我们可能仅需要操作一些普通元素，这个时候如果也使用自定义组件会显得很笨重。因此，Vue允许注册自定义指令来实现一些简单的功能。本文将结合自定义指令on-scrollto来看看在Vue中是如何实现自定义指令的。
+",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn" class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#注册指令"><span class="post-toc-number">1.</span> <span class="post-toc-text">注册指令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#钩子函数的参数"><span class="post-toc-number">2.</span> <span class="post-toc-text">钩子函数的参数</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#on-scrollto指令的实现"><span class="post-toc-number">3.</span> <span class="post-toc-text">on-scrollto指令的实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#指令定义解析"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">指令定义解析</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用指令"><span class="post-toc-number">4.</span> <span class="post-toc-text">使用指令</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-number">5.</span> <span class="post-toc-text">总结</span></a></li></ol>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                Vue之自定义指令
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/assets/img/avatar.png" width="44px" height="44px" alt="Author Avatar">
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Hanks</strong>
+        <span>May 07, 2017</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">Read this article on other devices</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC1klEQVR42u3aQVLkQAwEwPn/p3evexlTJXlhcKdPBJh2pycCoVK//hx5vbCxsbGxsbGxsbE/kv2Kr3/vf7fC9crv7k++s9kzNjY29gnsL/70v2FfPyZf4Rp/vVryRGxsbOxz2EnRui5XUUsQPzFhF4UWGxsbGztA1u3BurBhY2NjY28KWBI/Jb97VwODjY2NjV0ENPEIoW0nWvY3ZWnY2NjYH8+eDXp/9usfm29jY2Njfxh7cyUlp21acka9W2xsbOyHsvM2YxYhtU3IZsC8OnyJjY2N/Qh2O+KdFadNXHV95xevGxsbG/uh7Hvx77aVb7ctjUmZxMbGxj6BvcckBSn/TsJrDwNhY2NjP5WdhO9tO5FsdDOKaEssNjY29rPZbZmZhfX5E5MX3X5s2NjY2OewZ//o53FPscX/MCTAxsbGfjZ7MxiYFZX8kOXm+CY2Njb2Cex9NL8pXbNDnMM9Y2NjYz+UvSk/eeifr5aHSnmAhY2NjX0C+65R7iyQ2gRVRdnDxsbGfjQ7KQl5QL9B5i+u/aiwsbGxT2DPxgabTectUMuuOzBsbGzsX85uA/fX6GpHAncNnrGxsbGfzd60EG2ENBvxbobB2NjY2CewN0PZ5GW1I+R8b/XTsbGxsR/KzpuNuzaxuXN2qAgbGxv7BHZeBtrQJ28/ZgXv5lAJGxsb+5ez27HuJqzfHBtqPwxsbGzsE9jt1u96NXeVvajUYWNjYx/Abg/uzAKj65Yj+elwII2NjY39UPasVWgP5cxeRN5+1KESNjY29oPYr/jKW458tbYhaZslbGxs7HPYbWSfD2LzlWeBUf50bGxs7BPYs6KVhzuzA5RtOVxladjY2NjYo+FufmxoEzBhY2NjY7ej2c3IIR9FFHvGxsbGPoCdRz/tALhdYVb8hieVsLGxsR/Bng16Z8dr8lanbV2+ab6NjY2N/WHscy5sbGxsbGxsbGzsj7n+AuviNDZPUNl5AAAAAElFTkSuQmCC">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+        
+            <!-- Busuanzi Views -->
+            <a class="post_share-link" href="#">
+                <li class="mdl-menu__item">
+                    <span id="busuanzi_container_page_pv">
+                        <span id="busuanzi_value_page_pv"></span>&nbsp;Views
+                    </span>
+                </li>
+            </a>
+        
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=Vue之自定义指令&url=https://github.com/Hankszhang/2017/05/07/vue-directives/index.html&pic=https://github.com/Hankszhang/assets/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=Vue之自定义指令&url=https://github.com/Hankszhang/2017/05/07/vue-directives/index.html&via=Hanks" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/Hankszhang/2017/05/07/vue-directives/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=https://github.com/Hankszhang/2017/05/07/vue-directives/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=Hanks&#39; blog&title=Vue之自定义指令&summary=前端之路漫漫，其修远兮，吾将上下而求索&pics=https://github.com/Hankszhang/assets/img/favicon.png&url=https://github.com/Hankszhang/2017/05/07/vue-directives/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <blockquote>
+<p>我们都知道在Vue中，代码复用和抽象的主要形式是<strong>组件</strong>。但是在有些情况下，我们可能仅需要操作一些普通元素，这个时候如果也使用自定义组件会显得很笨重。因此，Vue允许注册自定义指令来实现一些简单的功能。本文将结合自定义指令<code>on-scrollto</code>来看看在Vue中是如何实现自定义指令的。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="注册指令"><a href="#注册指令" class="headerlink" title="注册指令"></a>注册指令</h2><p>首先，我们需要在Vue上注册我们的指令。Vue提供了两种方式来注册指令，第一种是全局注册的方式：</p>
+<pre><code class="js">// 定义一个全局的自定义指令：v-on-scrollto
+Vue.directive(&#39;name&#39;, {
+    // 定义该指令的一系列钩子函数，这些钩子函数都是可选的
+    bind() {},  // 仅在指令第一次绑定到元素上时被调用，用于做初始化
+    inserted() {},  // 绑定的元素被插入到父节点时被调用
+    update() {},    // 使用该指令的组件有更新时被调用，可能早于其子组件的更新
+    componentUpdated() {},  // 组件及其子元素都更新完之后才会被调用
+    unbind() {} // 指令从元素上解绑时被调用
+})
+</code></pre>
+<p>另一种是局部注册的方式，组件可以接受一个<code>directives</code>配置项，这种方式定义的指令只能作用于当前组件：</p>
+<pre><code class="js">directives: {
+    name: {
+        // directive definition
+    }
+}
+</code></pre>
+<h2 id="钩子函数的参数"><a href="#钩子函数的参数" class="headerlink" title="钩子函数的参数"></a>钩子函数的参数</h2><p>上面用于定义指令的钩子函数都会被传入下列参数，我们通过在钩子函数中使用这些参数来实现指令的功能：</p>
+<ul>
+<li><code>el</code>: 绑定指令的元素，可以直接用来操作DOM</li>
+<li><code>binding</code>: 一个包含下列属性的对象<ul>
+<li><code>name</code>: 指令的名字，不包括<code>v-</code>前缀</li>
+<li><code>value</code>: 指令接收的值，如<code>v-on-scrollto=&quot;v-my-directive=&quot;1 + 1&quot;</code>对应的value值为2</li>
+<li><code>oldValue</code>: 指令的上一个值，只在update和componentUpdated函数中可用</li>
+<li><code>expression</code>: 绑定指令的表示字符串，如上面的<code>&quot;1 + 1&quot;</code></li>
+<li><code>arg</code>: 传入指令的参数，如果有的话。如<code>v-my-directive:foo</code>中的参数为<code>foo</code></li>
+<li><code>modifiers</code>: 如果有修饰符的话，该参数为包含修饰符的对象，如<code>v-my-directive.foo.bar</code>，modifiers的值为：<code>{foo: true, bar: true}</code></li>
+</ul>
+</li>
+<li><code>vnode</code>: Vue编译器生成的虚拟节点</li>
+<li><code>oldVnode</code>: 上一个虚拟节点，只在update和componentUpdated中可用</li>
+</ul>
+<h2 id="on-scrollto指令的实现"><a href="#on-scrollto指令的实现" class="headerlink" title="on-scrollto指令的实现"></a><code>on-scrollto</code>指令的实现</h2><p>接下来我们结合代码看看<code>on-scrollto</code>指令是怎么定义的。顾名思义，这个指令实现的功能是：绑定元素滚动到某个位置时，执行某些操作。我们直接来看代码。</p>
+<p>这里为了与Vhtml的组件定义形式保持一致，将指令的定义拆分为两个文件：index.js 和 on-scrollto-directive.js文件，index.js文件作为指令的入口，而on-scrollto-directive.js文件则保存了指令的具体定义。<br>index.js中的代码：</p>
+<pre><code class="js">// 引入定义指令的文件
+import OnScrollto from &#39;./src/on-scrollto-directive&#39;;
+
+// 定义OnScrollto的install函数，该函数内部是声明on-scrollto指令的语句
+/* istanbul ignore next */
+OnScrollto.install = function (Vue) {
+    Vue.directive(OnScrollto.name, OnScrollto);
+};
+
+export default OnScrollto;
+</code></pre>
+<p>on-scrollto-directive.js中的代码：</p>
+<pre><code class="js">import {on, off, getComputedStyle} from &#39;vhtml-ui/src/utils/dom&#39;;
+import debounce from &#39;vhtml-ui/src/utils/debounce&#39;;
+
+const POSITION_MAP = {
+    bottom: function (el, currentTop) {
+        const styles = getComputedStyle(el);
+        const borderTop = parseInt(styles.borderTopWidth, 10);
+        const borderBottom = parseInt(styles.borderBottomWidth, 10);
+        const targetTop = el.scrollHeight - (el.offsetHeight - borderTop - borderBottom);
+        return (currentTop &gt; 0) &amp;&amp; (currentTop &gt;= targetTop);
+    },
+    top: function (el, currentTop) {
+        return currentTop &lt;= 0;
+    }
+};
+
+const calcPostion = debounce(function (el, binding) {
+    if (typeof binding.value !== &#39;function&#39;) {
+        return;
+    }
+
+    Object.keys(binding.modifiers).forEach((mod, index) =&gt; {
+        if (!POSITION_MAP[mod]) {
+            return;
+        }
+
+        const currentTop = el.scrollTop;
+        const result = POSITION_MAP[mod](el, currentTop);
+        if (result) {
+            binding.value(mod, currentTop);
+        }
+    });
+}, 200);
+
+const HOOK_PROPNAME = &#39;VHTML_ON_SCROLLTO_DIRECTIVE&#39;;
+
+export default {
+    name: &#39;on-scrollto&#39;,
+
+    bind(el, binding, vnode) {
+        const onscroll = function () {
+            calcPostion(el, binding);
+        };
+        on(el, &#39;scroll&#39;, onscroll);
+
+        Object.defineProperty(el, HOOK_PROPNAME, {
+            value: onscroll,
+            enumerable: false
+        });
+    },
+
+    unbind(el) {
+        const onscroll = el[HOOK_PROPNAME];
+        off(el, &#39;scroll&#39;, onscroll);
+    }
+};
+</code></pre>
+<h3 id="指令定义解析"><a href="#指令定义解析" class="headerlink" title="指令定义解析"></a>指令定义解析</h3><p>我们分步骤来看定义指令的代码，首先看定义的主体，即下面几行代码：</p>
+<pre><code class="js">HOOK_PROPNAME = &#39;VHTML_ON_SCROLLTO_DIRECTIVE&#39;;
+export default {
+    name: &#39;on-scrollto&#39;,
+
+    bind(el, binding, vnode) {
+        const onscroll = function () {
+            calcPostion(el, binding);
+        };
+        on(el, &#39;scroll&#39;, onscroll);
+
+        Object.defineProperty(el, HOOK_PROPNAME, {
+            value: onscroll,
+            enumerable: false
+        });
+    },
+
+    unbind(el) {
+        const onscroll = el[HOOK_PROPNAME];
+        off(el, &#39;scroll&#39;, onscroll);
+    }
+};
+</code></pre>
+<p>在钩子函数<code>bind</code>中使用了el、binding、vnode三个参数。首先，声明了一个onscroll函数，该函数里会执行我们定义的calcPostion函数，我们稍后再分析这个函数的代码。随后将onscroll函数绑定为元素原生<code>scroll</code>事件的回调函数，每当元素的scroll事件被触发时，就会执行calcPostion函数。然后，在元素上定义了一个不可枚举的属性<code>VHTML_ON_SCROLLTO_DIRECTIVE</code>，它的值为<code>onscroll</code>。我们通过这个属性来标记元素是否绑定了<code>onscroll</code>回调函数。<br>钩子函数<code>unbind</code>很简单，只是解除了<code>onscroll</code>函数的绑定。</p>
+<p>POSITION_MAP定义了两个触发条件（两个位置计算函数）：bottom和top，它们都返回Boolean类型的值，内部的逻辑分别是满足滑动到元素底部的条件和滑动到元素顶部的条件。某个函数返回值为真时，表示对应的条件成立（滚动条滑到了底部或顶部）。</p>
+<pre><code class="js">const POSITION_MAP = {
+    bottom: function (el, currentTop) {
+        const styles = getComputedStyle(el);
+        const borderTop = parseInt(styles.borderTopWidth, 10);
+        const borderBottom = parseInt(styles.borderBottomWidth, 10);
+        const targetTop = el.scrollHeight - (el.offsetHeight - borderTop - borderBottom);
+        return (currentTop &gt; 0) &amp;&amp; (currentTop &gt;= targetTop);
+    },
+    top: function (el, currentTop) {
+        return currentTop &lt;= 0;
+    }
+};
+</code></pre>
+<p>再看<code>calcPostion</code>函数：</p>
+<pre><code class="js">const calcPostion = debounce(function (el, binding) {
+    if (typeof binding.value !== &#39;function&#39;) {
+        return;
+    }
+
+    Object.keys(binding.modifiers).forEach((mod, index) =&gt; {
+        if (!POSITION_MAP[mod]) {
+            return;
+        }
+
+        const currentTop = el.scrollTop;
+        const result = POSITION_MAP[mod](el, currentTop);
+        if (result) {
+            binding.value(mod, currentTop);
+        }
+    });
+}, 200);
+</code></pre>
+<p>因为我们无法知道DOM元素的原生事件的触发周期，因此这里calcPostion函数的定义使用了防抖动函数debounce，使得calcPostion函数在200ms内只被执行一次。</p>
+<p>然后会遍历指令绑定的修饰符，如果指令的当前修饰符绑定的值不是函数，则直接返回；如果绑定的值是函数，且滚动条的位置满足触发条件（bottom或top)，则执行指令绑定的回调函数（即指令的绑定值）。</p>
+<p>就这样，简单的<code>on-scrollto</code>指令就定义好了，它具有两种修饰符可选：bottom、top，滑动滚动条满足相应的条件就会将指令绑定的值（函数）作为回调函数执行。</p>
+<h2 id="使用指令"><a href="#使用指令" class="headerlink" title="使用指令"></a>使用指令</h2><p>在元素上绑定指令的格式很简单，如下：</p>
+<pre><code class="html">&lt;element v-on-scrollto.bottom=&quot;handleToBottom&quot;&gt;&lt;/element&gt;
+&lt;element v-on-scrollto.top=&quot;handleToTop&quot;&gt;&lt;/element&gt;
+</code></pre>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文通过一个简单的滚动条指令来说明了Vue中自定义指令的定义规范，麻雀虽小五脏俱全。通过本例的扩展即可编写更加复杂而实用的自定义指令。</p>
+
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2017/05/14/highcharts-pattern-fill/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2017/03/15/js-closure/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/assets/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/assets/img/avatar.png" alt="Hanks's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        hankszhang918@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="mailto: hankszhang918@gmail.com" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Development/">Development<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Experience/">Experience<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Frontend/">Frontend<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/Rust/">Rust<span class="sidebar_archives-count">1</span></a>
+            </li></ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">12</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+
+<!-- Help & Support -->
+<!--
+
+    <a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.help
+        <span class="mdl-button__ripple-container">
+          <span class="mdl-ripple"></span>
+        </span>
+      </div>
+    </a>
+
+-->
+
+<!-- Feedback -->
+<!--
+
+    <a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.feedback
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Hankszhang" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+        <a href="https://www.zhihu.com/people/hanks-zhang-8" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-zhihu">
+                <span class="visuallyhidden">Zhihu</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>Hanks' blog
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?wgjW/HuQG9JDgvPDPoRAng==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script>lsloader.load("sm_js","/js/smoothscroll.js?tNQK2Tw2SUL8a1Scn/Mgew==", true)</script>
+    
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+    
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
+        
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>

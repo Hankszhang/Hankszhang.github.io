@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html style="display: none;" lang="en">
+    <head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <!--
+        © Material Theme
+        https://github.com/viosey/hexo-theme-material
+        Version: 1.5.2 -->
+    <script>
+        window.materialVersion = "1.5.2"
+        // Delete localstorage with these tags
+        window.oldVersion = [
+            'codestartv1',
+            '1.3.4',
+            '1.4.0',
+            '1.4.0b1',
+            '1.5.0'
+        ]
+    </script>
+
+    <!-- dns prefetch -->
+    <meta http-equiv="x-dns-prefetch-control" content="on">
+
+
+
+    <link rel="dns-prefetch" href="https://busuanzi.ibruce.info">
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Meta & Info -->
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!-- Title -->
+    
+    <title>
+        
+            基于Vue的跨区域拖拽方案实现 | 
+        
+        Hanks&#39; blog
+    </title>
+
+    <!-- Favicons -->
+    <link rel="icon shortcut" type="image/ico" href="/assets/img/favicon.png">
+    <link rel="icon" href="/assets/img/favicon.png">
+
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" itemprop="description" content="
+数据驱动是Vue的核心思想之一，Vue官方也鼓励使用数据驱动思想进行开发，这样可以有效利用Vue的diff算法提升性能。拖拽是前端开发中一种常见的交互形式，本文介绍一种利用Vue的数据驱动特性和双向绑定能力实现的跨区域拖拽方案(兼容IE9+)。
+">
+    <meta name="keywords" content="null,JavaScript,Vue,drag">
+    <meta name="theme-color" content="#0097A7">
+
+    <!-- Disable Fucking Bloody Baidu Tranformation -->
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="/css/ie-blocker.css">
+
+        
+            <script src="/js/ie-blocker.en.js"></script>
+        
+    <![endif]-->
+
+    <!-- Import lsloader -->
+    <script>(function(){window.lsloader={jsRunSequence:[],jsnamemap:{},cssnamemap:{}};lsloader.removeLS=function(a){try{localStorage.removeItem(a)}catch(b){}};lsloader.setLS=function(a,c){try{localStorage.setItem(a,c)}catch(b){}};lsloader.getLS=function(a){var c="";try{c=localStorage.getItem(a)}catch(b){c=""}return c};versionString="/*"+(window.materialVersion||"unknownVersion")+"*/";lsloader.clean=function(){try{var b=[];for(var a=0;a<localStorage.length;a++){b.push(localStorage.key(a))}b.forEach(function(e){var f=lsloader.getLS(e);if(window.oldVersion){var d=window.oldVersion.reduce(function(g,h){return g||f.indexOf("/*"+h+"*/")!==-1},false);if(d){lsloader.removeLS(e)}}})}catch(c){}};lsloader.clean();lsloader.load=function(f,a,b,d){if(typeof b==="boolean"){d=b;b=undefined}d=d||false;b=b||function(){};var e;e=this.getLS(f);if(e&&e.indexOf(versionString)===-1){this.removeLS(f);this.requestResource(f,a,b,d);return}if(e){var c=e.split(versionString)[0];if(c!=a){console.log("reload:"+a);this.removeLS(f);this.requestResource(f,a,b,d);return}e=e.split(versionString)[1];if(d){this.jsRunSequence.push({name:f,code:e});this.runjs(a,f,e)}else{document.getElementById(f).appendChild(document.createTextNode(e));b()}}else{this.requestResource(f,a,b,d)}};lsloader.requestResource=function(b,e,a,c){var d=this;if(c){this.iojs(e,b,function(h,f,g){d.setLS(f,h+versionString+g);d.runjs(h,f,g)})}else{this.iocss(e,b,function(f){document.getElementById(b).appendChild(document.createTextNode(f));d.setLS(b,e+versionString+f)},a)}};lsloader.iojs=function(d,b,g){var a=this;a.jsRunSequence.push({name:b,code:""});try{var f=new XMLHttpRequest();f.open("get",d,true);f.onreadystatechange=function(){if(f.readyState==4){if((f.status>=200&&f.status<300)||f.status==304){if(f.response!=""){g(d,b,f.response);return}}a.jsfallback(d,b)}};f.send(null)}catch(c){a.jsfallback(d,b)}};lsloader.iocss=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.iofonts=function(f,c,h,a){var b=this;try{var g=new XMLHttpRequest();g.open("get",f,true);g.onreadystatechange=function(){if(g.readyState==4){if((g.status>=200&&g.status<300)||g.status==304){if(g.response!=""){h(g.response);a();return}}b.cssfallback(f,c,a)}};g.send(null)}catch(d){b.cssfallback(f,c,a)}};lsloader.runjs=function(f,c,e){if(!!c&&!!e){for(var b in this.jsRunSequence){if(this.jsRunSequence[b].name==c){this.jsRunSequence[b].code=e}}}if(!!this.jsRunSequence[0]&&!!this.jsRunSequence[0].code&&this.jsRunSequence[0].status!="failed"){var a=document.createElement("script");a.appendChild(document.createTextNode(this.jsRunSequence[0].code));a.type="text/javascript";document.getElementsByTagName("head")[0].appendChild(a);this.jsRunSequence.shift();if(this.jsRunSequence.length>0){this.runjs()}}else{if(!!this.jsRunSequence[0]&&this.jsRunSequence[0].status=="failed"){var d=this;var a=document.createElement("script");a.src=this.jsRunSequence[0].path;a.type="text/javascript";this.jsRunSequence[0].status="loading";a.onload=function(){d.jsRunSequence.shift();if(d.jsRunSequence.length>0){d.runjs()}};document.body.appendChild(a)}}};lsloader.tagLoad=function(b,a){this.jsRunSequence.push({name:a,code:"",path:b,status:"failed"});this.runjs()};lsloader.jsfallback=function(c,b){if(!!this.jsnamemap[b]){return}else{this.jsnamemap[b]=b}for(var a in this.jsRunSequence){if(this.jsRunSequence[a].name==b){this.jsRunSequence[a].code="";this.jsRunSequence[a].status="failed";this.jsRunSequence[a].path=c}}this.runjs()};lsloader.cssfallback=function(e,c,b){if(!!this.cssnamemap[c]){return}else{this.cssnamemap[c]=1}var d=document.createElement("link");d.type="text/css";d.href=e;d.rel="stylesheet";d.onload=d.onerror=b;var a=document.getElementsByTagName("script")[0];a.parentNode.insertBefore(d,a)};lsloader.runInlineScript=function(c,b){var a=document.getElementById(b).innerText;this.jsRunSequence.push({name:c,code:a});this.runjs()}})();</script>
+
+    <!-- Import queue -->
+    <script>function Queue(){this.dataStore=[];this.offer=b;this.poll=d;this.execNext=a;this.debug=false;this.startDebug=c;function b(e){if(this.debug){console.log("Offered a Queued Function.")}if(typeof e==="function"){this.dataStore.push(e)}else{console.log("You must offer a function.")}}function d(){if(this.debug){console.log("Polled a Queued Function.")}return this.dataStore.shift()}function a(){var e=this.poll();if(e!==undefined){if(this.debug){console.log("Run a Queued Function.")}e()}}function c(){this.debug=true}}var queue=new Queue();</script>
+
+    <!-- Import CSS -->
+    
+        <style id="material_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_css","/css/material.min.css?Z7a72R1E4SxzBKR/WGctOA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+        <style id="style_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("style_css","/css/style.min.css?MKetZV3cUTfDxvMffaOezg==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+        
+            
+                <style id="prettify_css"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_css","/css/prettify.min.css?zp8STOU9v89XWFEnN+6YmQ==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+                <style id="prettify_theme"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("prettify_theme","/css/prettify/tomorrow.min.css?HIeSQl6y3t6jBuxHvLPGSA==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+            
+        
+
+    
+
+    
+
+    <!-- Config CSS -->
+
+<!-- Other Styles -->
+<style>
+  body, html {
+    font-family: Roboto, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    overflow-x: hidden !important;
+  }
+  
+  code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  a {
+    color: #00838F;
+  }
+
+  .mdl-card__media,
+  #search-label,
+  #search-form-label:after,
+  #scheme-Paradox .hot_tags-count,
+  #scheme-Paradox .sidebar_archives-count,
+  #scheme-Paradox .sidebar-colored .sidebar-header,
+  #scheme-Paradox .sidebar-colored .sidebar-badge{
+    background-color: #0097A7 !important;
+  }
+
+  /* Sidebar User Drop Down Menu Text Color */
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:hover,
+  #scheme-Paradox .sidebar-colored .sidebar-nav>.dropdown>.dropdown-menu>li>a:focus {
+    color: #0097A7 !important;
+  }
+
+  #post_entry-right-info,
+  .sidebar-colored .sidebar-nav li:hover > a,
+  .sidebar-colored .sidebar-nav li:hover > a i,
+  .sidebar-colored .sidebar-nav li > a:hover,
+  .sidebar-colored .sidebar-nav li > a:hover i,
+  .sidebar-colored .sidebar-nav li > a:focus i,
+  .sidebar-colored .sidebar-nav > .open > a,
+  .sidebar-colored .sidebar-nav > .open > a:hover,
+  .sidebar-colored .sidebar-nav > .open > a:focus,
+  #ds-reset #ds-ctx .ds-ctx-entry .ds-ctx-head a {
+    color: #0097A7 !important;
+  }
+
+  .toTop {
+    background: #757575 !important;
+  }
+
+  .material-layout .material-post>.material-nav,
+  .material-layout .material-index>.material-nav,
+  .material-nav a {
+    color: #757575;
+  }
+
+  #scheme-Paradox .MD-burger-layer {
+    background-color: #757575;
+  }
+
+  #scheme-Paradox #post-toc-trigger-btn {
+    color: #757575;
+  }
+
+  .post-toc a:hover {
+    color: #00838F;
+    text-decoration: underline;
+  }
+
+</style>
+
+
+<!-- Theme Background Related-->
+
+    <style>
+      body{
+        background-color: #F5F5F5;
+      }
+
+      /* blog_info bottom background */
+      #scheme-Paradox .material-layout .something-else .mdl-card__supporting-text{
+        background-color: #fff;
+      }
+    </style>
+
+
+
+
+<!-- Fade Effect -->
+
+    <style>
+      .fade {
+        transition: all 800ms linear;
+        -webkit-transform: translate3d(0,0,0);
+        -moz-transform: translate3d(0,0,0);
+        -ms-transform: translate3d(0,0,0);
+        -o-transform: translate3d(0,0,0);
+        transform: translate3d(0,0,0);
+        opacity: 1;
+      }
+
+      .fade.out{
+        opacity: 0;
+      }
+    </style>
+
+
+<!-- Import Font -->
+<!-- Import Roboto -->
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+
+
+<!-- Import Material Icons -->
+
+
+    <style id="material_icons"></style><script>if(typeof window.lsLoadCSSMaxNums === "undefined")window.lsLoadCSSMaxNums = 0;window.lsLoadCSSMaxNums++;lsloader.load("material_icons","/css/material-icons.css?pqhB/Rd/ab0H2+kZp0RDmw==",function(){if(typeof window.lsLoadCSSNums === "undefined")window.lsLoadCSSNums = 0;window.lsLoadCSSNums++;if(window.lsLoadCSSNums == window.lsLoadCSSMaxNums)document.documentElement.style.display="";}, false)</script>
+
+
+
+
+    <!-- Import jQuery -->
+    
+        <script>lsloader.load("jq_js","/js/jquery.min.js?ezyEvm8ST5CGfpA+kFFi1g==", true)</script>
+    
+
+    <!-- WebAPP Icons -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Hanks&#39; blog">
+    <meta name="msapplication-starturl" content="https://github.com/Hankszhang/2018/07/06/vue-dragarea/">
+    <meta name="msapplication-navbutton-color" content="#0097A7">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Hanks&#39; blog">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon" href="/assets/img/favicon.png">
+
+    <!-- Site Verification -->
+    
+    
+
+    <!-- RSS -->
+    
+
+    <!-- The Open Graph protocol -->
+    <meta property="og:url" content="https://github.com/Hankszhang/2018/07/06/vue-dragarea/">
+    <meta property="og:type" content="blog">
+    <meta property="og:title" content="基于Vue的跨区域拖拽方案实现 | Hanks&#39; blog">
+    <meta property="og:image" content="/assets/img/favicon.png">
+    <meta property="og:description" content="
+数据驱动是Vue的核心思想之一，Vue官方也鼓励使用数据驱动思想进行开发，这样可以有效利用Vue的diff算法提升性能。拖拽是前端开发中一种常见的交互形式，本文介绍一种利用Vue的数据驱动特性和双向绑定能力实现的跨区域拖拽方案(兼容IE9+)。
+">
+    <meta property="og:article:tag" content="JavaScript"> <meta property="og:article:tag" content="Vue"> <meta property="og:article:tag" content="drag"> 
+
+    
+        <meta property="article:published_time" content="Fri Jul 06 2018 16:03:01 GMT+0800">
+        <meta property="article:modified_time" content="Sat Oct 27 2018 10:46:24 GMT+0800">
+    
+
+    <!-- The Twitter Card protocol -->
+    <meta name="twitter:card" content="summary_large_image">
+
+    <!-- Add canonical link for SEO -->
+    
+        <link rel="canonical" href="https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html">
+    
+
+    <!-- Structured-data for SEO -->
+    
+        
+
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "mainEntityOfPage": "https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html",
+    "headline": "基于Vue的跨区域拖拽方案实现",
+    "datePublished": "Fri Jul 06 2018 16:03:01 GMT+0800",
+    "dateModified": "Sat Oct 27 2018 10:46:24 GMT+0800",
+    "author": {
+        "@type": "Person",
+        "name": "Hanks",
+        "image": {
+            "@type": "ImageObject",
+            "url": "/assets/img/avatar.png"
+        },
+        "description": "Stay curious and keep learning"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Hanks&#39; blog",
+        "logo": {
+            "@type":"ImageObject",
+            "url": "/assets/img/favicon.png"
+        }
+    },
+    "keywords": ",JavaScript,Vue,dragnull",
+    "description": "
+数据驱动是Vue的核心思想之一，Vue官方也鼓励使用数据驱动思想进行开发，这样可以有效利用Vue的diff算法提升性能。拖拽是前端开发中一种常见的交互形式，本文介绍一种利用Vue的数据驱动特性和双向绑定能力实现的跨区域拖拽方案(兼容IE9+)。
+",
+}
+</script>
+
+
+    
+
+    <!-- Analytics -->
+    
+    
+    
+
+    <!-- Custom Head -->
+    
+
+</head>
+
+
+    
+        <body id="scheme-Paradox" class="lazy">
+            <div class="material-layout  mdl-js-layout has-drawer is-upgraded">
+                
+
+                <!-- Main Container -->
+                <main class="material-layout__content" id="main">
+
+                    <!-- Top Anchor -->
+                    <div id="top"></div>
+
+                    
+                        <!-- Hamburger Button -->
+                        <button class="MD-burger-icon sidebar-toggle">
+                            <span class="MD-burger-layer"></span>
+                        </button>
+                    
+
+                    <!-- Post TOC -->
+
+    
+    <!-- Back Button -->
+    <!--
+    <div class="material-back" id="backhome-div" tabindex="0">
+        <a class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon"
+           href="#" onclick="window.history.back();return false;"
+           target="_self"
+           role="button"
+           data-upgraded=",MaterialButton,MaterialRipple">
+            <i class="material-icons" role="presentation">arrow_back</i>
+            <span class="mdl-button__ripple-container">
+                <span class="mdl-ripple"></span>
+            </span>
+        </a>
+    </div>
+    -->
+
+
+    <!-- Left aligned menu below button -->
+    
+    
+    <button id="post-toc-trigger-btn" class="mdl-button mdl-js-button mdl-button--icon">
+        <i class="material-icons">format_list_numbered</i>
+    </button>
+
+    <ul class="post-toc-wrap mdl-menu mdl-menu--bottom-left mdl-js-menu mdl-js-ripple-effect" for="post-toc-trigger-btn" style="max-height:80vh; overflow-y:scroll;">
+        <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#设计方案"><span class="post-toc-number">1.</span> <span class="post-toc-text">设计方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#整体框架"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">整体框架</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#拖拽中间态处理"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">拖拽中间态处理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#执行drop操作"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">执行drop操作</span></a></li></ol></li></ol><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#难点及解决方案"><span class="post-toc-number">2.</span> <span class="post-toc-text">难点及解决方案</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#难点一：drop位置的确定"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">难点一：drop位置的确定</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#难点二：-滚动处理"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">难点二： 滚动处理</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#难点三：-跨区域状态同步"><span class="post-toc-number">2.0.3.</span> <span class="post-toc-text">难点三： 跨区域状态同步</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#结语"><span class="post-toc-number">3.</span> <span class="post-toc-text">结语</span></a></li>
+    </ul>
+    
+
+
+
+
+<!-- Layouts -->
+
+    <!-- Post Module -->
+    <div class="material-post_container">
+
+        <div class="material-post mdl-grid">
+            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+
+                <!-- Post Header(Thumbnail & Title) -->
+                
+    <!-- Paradox Post Header -->
+    
+        
+            <!-- Random Thumbnail -->
+            <div class="post_thumbnail-random mdl-card__media mdl-color-text--grey-50">
+            <script type="text/ls-javascript" id="post-thumbnail-script">
+    var randomNum = Math.floor(Math.random() * 19 + 1);
+
+    $('.post_thumbnail-random').attr('data-original', '/img/random/material-' + randomNum + '.png');
+    $('.post_thumbnail-random').addClass('lazy');
+</script>
+
+        
+    
+            <p class="article-headline-p">
+                基于Vue的跨区域拖拽方案实现
+            </p>
+        </div>
+
+
+
+
+
+                
+                    <!-- Paradox Post Info -->
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text meta">
+
+    <!-- Author Avatar -->
+    <div id="author-avatar">
+        <img src="/assets/img/avatar.png" width="44px" height="44px" alt="Author Avatar">
+    </div>
+    <!-- Author Name & Date -->
+    <div>
+        <strong>Hanks</strong>
+        <span>Jul 06, 2018</span>
+    </div>
+
+    <div class="section-spacer"></div>
+
+    <!-- Favorite -->
+    <!--
+        <button id="article-functions-like-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon btn-like">
+            <i class="material-icons" role="presentation">favorite</i>
+            <span class="visuallyhidden">favorites</span>
+        </button>
+    -->
+
+    <!-- Qrcode -->
+    
+        <button id="article-functions-qrcode-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">devices other</i>
+    <span class="visuallyhidden">devices other</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-qrcode-button">
+    <li class="mdl-menu__item">Read this article on other devices</li>
+    
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPYAAAD2CAAAAADAeSUUAAAC0ElEQVR42u3aS27DMAwFwNz/0u02QBv7kXQCR5qsgsIfjrJg9ajHz5afBzY2NjY2NjY2NvYt2Y/488+DiteUC3266+/3as3Y2NjYa7Pz1+fFVa98VfSrv1RrxsbGxt6Bffzi43KTEpN784XIr8HGxsbGPobl7Sd/5smmAhsbGxv7IvY78NVWh42NjY1dDWjyUD7fZpTjoc9nadjY2Ni3Z88xn//+0fk2NjY29o3ZvWM00b/+rSjq+OjPqHJsbGzsRdl5Y5gcwakeBkruyuvExsbG3oFdbUu9MUB1m1GNlk5+JGxsbOyl2b1m9o6xwWT5ThYOGxsbe1H2PLLJW84xKV/KvCpsbGzsHdhJA5hvSOYbnuPamvNtbGxs7EXZ+UYliYSqjS1vqNWmi42Njb0q+9qGUW1UkwaWb2mwsbGx12ZX20Z1PNx7Zu+9F0xFsLGxsb+cPRmmVjcPkxZYPTCEjY2NvQO7Gh7lwVMeWiU/Ru9ebGxs7LXZ1WM01eFB0sDyv0yWGxsbG3sfdm8A3AuYJgcxq2NgbGxs7FXZkxCnF+tXF663cSrswLCxsbG/nJ2HMqNApxhaVRc3qhkbGxt7aXbvoEz1yOZkDNAb92JjY2PvwJ5HQsehz+SQTb7oSavDxsbGXpV9bUyfx0N5tJTUE9WGjY2NvSi794K8pfWipWQzkw8GsLGxsXdgT0L/XuTUa2O9N2JjY2Pvw86P4OSDhN41J/FQcZODjY2NvQ87bzlVfG9I0Gts2NjY2LuxJy2qd0CnuuGpPvPlldjY2NiLspsBzeCuXpg1GS1gY2Nj78BOmtZ8MDxpY72nYWNjY+/GvircSQYPecA0D6ewsbGxsZOyqq1uvtlIhsHY2NjY2L0NRlREPEiuHiF6YwPDxsbGvj17MmTNwVVS7/nY2NjYu7Enwc0k6JkvYmHMjI2Njb0oe58PNjY2NjY2NjY29m0+v70FpLdd34NRAAAAAElFTkSuQmCC">
+    
+</ul>
+
+    
+
+    <!-- Tags (bookmark) -->
+    
+    <button id="article-functions-viewtags-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <i class="material-icons" role="presentation">bookmark</i>
+        <span class="visuallyhidden">bookmark</span>
+    </button>
+    <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-functions-viewtags-button">
+        <li class="mdl-menu__item">
+        <a class="post_tag-link" href="/tags/JavaScript/">JavaScript</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/Vue/">Vue</a></li><li class="mdl-menu__item"><a class="post_tag-link" href="/tags/drag/">drag</a>
+    </li></ul>
+    
+
+    <!-- Share -->
+    
+        <button id="article-fuctions-share-button" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+    <i class="material-icons" role="presentation">share</i>
+    <span class="visuallyhidden">share</span>
+</button>
+<ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="article-fuctions-share-button">
+    
+
+    
+        
+            <!-- Busuanzi Views -->
+            <a class="post_share-link" href="#">
+                <li class="mdl-menu__item">
+                    <span id="busuanzi_container_page_pv">
+                        <span id="busuanzi_value_page_pv"></span>&nbsp;Views
+                    </span>
+                </li>
+            </a>
+        
+    
+
+    <!-- Share Weibo -->
+    
+        <a class="post_share-link" href="http://service.weibo.com/share/share.php?appkey=&title=基于Vue的跨区域拖拽方案实现&url=https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html&pic=https://github.com/Hankszhang/assets/img/favicon.png&searchPic=false&style=simple" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Weibo
+            </li>
+        </a>
+    
+
+    <!-- Share Twitter -->
+    
+        <a class="post_share-link" href="https://twitter.com/intent/tweet?text=基于Vue的跨区域拖拽方案实现&url=https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html&via=Hanks" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Twitter
+            </li>
+        </a>
+    
+
+    <!-- Share Facebook -->
+    
+        <a class="post_share-link" href="https://www.facebook.com/sharer/sharer.php?u=https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Facebook
+            </li>
+        </a>
+    
+
+    <!-- Share Google+ -->
+    
+        <a class="post_share-link" href="https://plus.google.com/share?url=https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to Google+
+            </li>
+        </a>
+    
+
+    <!-- Share LinkedIn -->
+    
+
+    <!-- Share QQ -->
+    
+        <a class="post_share-link" href="http://connect.qq.com/widget/shareqq/index.html?site=Hanks&#39; blog&title=基于Vue的跨区域拖拽方案实现&summary=前端之路漫漫，其修远兮，吾将上下而求索&pics=https://github.com/Hankszhang/assets/img/favicon.png&url=https://github.com/Hankszhang/2018/07/06/vue-dragarea/index.html" target="_blank">
+            <li class="mdl-menu__item">
+                Share to QQ
+            </li>
+        </a>
+    
+
+    <!-- Share Telegram -->
+    
+</ul>
+
+    
+</div>
+
+                
+
+                <!-- Post Content -->
+                <div id="post-content" class="mdl-color-text--grey-700 mdl-card__supporting-text fade out">
+    
+        <blockquote>
+<p>数据驱动是Vue的核心思想之一，Vue官方也鼓励使用数据驱动思想进行开发，这样可以有效利用Vue的diff算法提升性能。拖拽是前端开发中一种常见的交互形式，本文介绍一种利用Vue的数据驱动特性和双向绑定能力实现的跨区域拖拽方案(兼容IE9+)。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="设计方案"><a href="#设计方案" class="headerlink" title="设计方案"></a>设计方案</h2><h4 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h4><p>首先考虑到需要兼容IE9，因此不能使用现代浏览器原生支持的<a href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API" target="_blank" rel="noopener">HTML Drag and Drop API</a>，而改用<code>mousedown</code>、<code>mousemove</code>和<code>mouseup</code>的组合来模拟拖拽操作。</p>
+<p>模拟拖拽的思路其实很简单，在组件上注册<code>mousedown</code>事件的回调，并在回调函数中将<code>mousemove</code>和<code>mouseup</code>事件注册到<code>document</code>上，在它们各自的回调函数中分别处理中间态处理和drop操作，代码示例如下：</p>
+<p><strong>注：注册的事件一定要记得注销，否则可能会造成内存泄露。</strong></p>
+<pre><code class="js">mounted() {
+    on(this.$el, &#39;mousedown&#39;, this.mouseDown, false);
+},
+
+methods: {
+    mouseDown(e) {
+        on(document, &#39;mousemove&#39;, this.mouseMove);
+        on(document, &#39;mouseup&#39;, this.mouseUp);
+        // 初始化
+    },
+
+    mouseMove(e) {
+        // 处理拖拽中间态
+    },
+
+    mouseup(e) {
+        this.offEvents;
+        // 执行或取消 drop 操作
+    },
+    offEvents() {
+        off(document, &#39;mousemove&#39;, this.mouseMove);
+        off(document, &#39;mouseup&#39;, this.mouseUp);
+    }
+}
+beforeDestroy() {
+    this.offEvents();
+    off(this.$el, &#39;mousedown&#39;, this.mouseDown, false);
+}
+</code></pre>
+<h4 id="拖拽中间态处理"><a href="#拖拽中间态处理" class="headerlink" title="拖拽中间态处理"></a>拖拽中间态处理</h4><p>当我们拖动鼠标开始拖拽的时候，需要在<code>mousemove</code>的回调中有3个中间态需要处理：</p>
+<ul>
+<li>更新被拖拽的节点的位置</li>
+<li>计算拖拽节点hover在哪个节点上（即图中的<code>dropInfo</code>，用于表示插入位置，详见后文）。</li>
+<li>为了支持跨区域拖拽，需要将当前dragarea内的<code>dropInfo</code>状态同步到其他dragarea内，这里使用<code>eventBus</code>来实现组件间的通信，详见后文。</li>
+</ul>
+<div style="text-align: center;"><img src="/assets/img/mouseMove.png" alt="拖拽中间态"></div>
+
+<h4 id="执行drop操作"><a href="#执行drop操作" class="headerlink" title="执行drop操作"></a>执行drop操作</h4><p>拖拽结束时，要做的事情就是在<code>mouseup</code>的回调中执行或取消drop操作，判断逻辑如下：</p>
+<div style="text-align: center;"><img src="/assets/img/mouseUp.png" alt="drop操作"></div>
+
+
+
+<h2 id="难点及解决方案"><a href="#难点及解决方案" class="headerlink" title="难点及解决方案"></a>难点及解决方案</h2><p>了解了整体的设计思路后，我们来看一下实践过程中遇到的一些难点及解决方案。</p>
+<h4 id="难点一：drop位置的确定"><a href="#难点一：drop位置的确定" class="headerlink" title="难点一：drop位置的确定"></a>难点一：drop位置的确定</h4><p>前文有提到，我们通过<code>dropInfo</code>来确定插入的位置，它包含两个字段：</p>
+<ul>
+<li>dropItemId:    作为参考的drag-item的id</li>
+<li>insertType：1表示在参考drag-item之前插入，表示参考drag-item之后插入</li>
+</ul>
+<p>那么我们怎么才能计算出这两个字段的值呢？</p>
+<p>首先，我们考虑如何得到dropItemId的值。</p>
+<p>这里先介绍一个强大的API：<a href="https://developer.mozilla.org/en-US/docs/Web/API/DocumentOrShadowRoot/elementFromPoint" target="_blank" rel="noopener"><code>document.elementFromPoint</code></a>，用它可以获得相对<code>viewport</code>指定坐标位置处最顶层的DOM节点。</p>
+<p>若将drag-item的id作为属性绑定在其DOM上，借助这个API，找到drag-item，也就就得到dropItemId了：</p>
+<p>1、用当前鼠标位置拿到最顶层的DOM</p>
+<pre><code class="js">getUnderneathNode(x, y) {
+    // 先将dragging item设置为none
+    // 以便elementFromPoint能拿到拖拽结束时鼠标位置处的最顶层DOM节点
+
+    addClass(this.$srcNode, &#39;is-hidden&#39;);
+    let target = document.elementFromPoint(x, y);
+    removeClass(this.$srcNode, &#39;is-hidden&#39;);
+
+    return target || null;
+},
+</code></pre>
+<p>2、递归找到当前DOM节点所属的v-drag-item</p>
+<pre><code class="js">/**
+* 根据targetClass找到目标DOM节点
+* @param {Element} eTarget 源事件DOM节点
+* @param {String} targetClass 具有标记的类名
+* @return {Element | null} 返回找到的DOM节点或null
+*/
+findTargetNode(eTarget, targetClass = ITEM_CLASS) {
+    if (eTarget.className &amp;&amp; hasClass(eTarget, targetClass)) {
+        return eTarget;
+    }
+
+    let parent = eTarget.parentNode;
+    if (parent) {
+        return this.findTargetNode(parent, targetClass);
+    }
+    return null;
+},
+</code></pre>
+<p>3、获取DOM节点上的id</p>
+<pre><code class="js">getItemId(target) {
+    return target.getAttribute(&#39;data-id&#39;) || &#39;&#39;;
+}
+</code></pre>
+<p>接下来，我们需要通过碰撞热区来确定<code>insertType</code>的值。</p>
+<p>本组件支持通过自定义类名来定义热区的大小，实现的方法是在真实拖拽节点外面包一层节点，因此一个<code>v-drag-item</code>的DOM结构如下：</p>
+<div style="text-align: center;"><img src="/assets/img/drag-item.png" alt="drag-item"></div>
+
+<p>我们根据类名<code>v-drag-item__inner</code>来找拖拽节点，而在计算碰撞区域的时候则用类名<code>v-drag-item</code>。</p>
+<div style="text-align: center;"><img src="/assets/img/drag-item-hotarea.png" alt="碰撞热区"></div>
+
+<p>若鼠标位置落在<code>v-drag-item</code>的上半部分，则<code>insertType</code>为1，反之则为2。</p>
+<h4 id="难点二：-滚动处理"><a href="#难点二：-滚动处理" class="headerlink" title="难点二： 滚动处理"></a>难点二： 滚动处理</h4><p>在拖拽过程中，如果<code>v-dragarea</code>或其父容器有滚动条，那么在某些情况下可能需要在拖到容器底部的时候滚动条自动向下滚动，拖动到顶部的时候则向上滚动。为了实现这个效果，需要在<code>mousemove</code>的回调中多做一个逻辑处理。</p>
+<pre><code class="js">// 只有开启了自动滚动时才处理
+if (this.useAutoScroll) {
+    // 获取设置了overflow: scroll的父容器
+    const scrollParent = getScrollParent(this.$el);
+
+    // 若父容器存在且出现了可见的滚动条
+    if (scrollParent &amp;&amp; hasScrollbar(scrollParent)) {
+        // 计算滚动方向
+        const direction = this.getScrollDirection(scrollParent);
+        // 执行滚动
+        direction &amp;&amp; this.scrollContainer(scrollParent, direction);
+    }
+}
+</code></pre>
+<p>下面的函数可以用来判断一个元素是否真的有可见的滚动条：</p>
+<pre><code class="js">/**
+ * 判断指定element元素是否有滚动条
+ * @param {Element} element 指定的元素
+ * @param {String} direction 滚动条方向，默认为垂直方向
+ * @return {Boolean} 是否有滚动条
+ */
+function hasScrollbar(element, direction = &#39;vertical&#39;) {
+    if (direction === &#39;vertical&#39;) {
+        return element.scrollHeight &gt; element.clientHeight;
+    }
+    return element.scrollWidth &gt; element.clientWidth;
+}
+</code></pre>
+<p>滚动方向的判断：</p>
+<pre><code class="js">/**
+* 根据越界的边界判断滚动条的滚动方向
+* @param {Element} scrollParent 有滚动条的父容器
+* @return {String} 滚动方向，不越界或滚动条已无法滚动则返回空字符串
+*/
+getScrollDirection(scrollParent) {
+    const containerRect = getRect(scrollParent);
+    const srcNodeRect = getRect(this.$srcNode);
+    const step = this.scrollStep;
+    // 被拖拽的item快到底部了且滚动条还没到底部，则滚动方向为bottom
+    if (srcNodeRect.top + srcNodeRect.height + step &gt; containerRect.top + containerRect.height
+        &amp;&amp; scrollParent.scrollHeight &gt; scrollParent.clientHeight + scrollParent.scrollTop) {
+        return &#39;bottom&#39;;
+    }
+    // 被拖拽的item快到顶部了且滚动条还没到顶部，则滚动方向为top
+    if (srcNodeRect.top - step &lt; containerRect.top &amp;&amp; scrollParent.scrollTop &gt; 0) {
+        return &#39;top&#39;;
+    }
+    return &#39;&#39;;
+}
+</code></pre>
+<h4 id="难点三：-跨区域状态同步"><a href="#难点三：-跨区域状态同步" class="headerlink" title="难点三： 跨区域状态同步"></a>难点三： 跨区域状态同步</h4><p>在多<code>dragarea</code>之间拖拽的时候，需要将<code>dropInfo</code>中间态从当前<code>dragarea</code>同步到其他<code>dragarea</code>，这样才可以在其他<code>dragarea</code>中拿到当前drop位置，并判断是否出现待drop的样式。</p>
+<p>这种情况是典型的兄弟组件或父子组件间的通信，因此可以用<code>eventBus</code>来实现，代码如下：</p>
+<pre><code class="js">methods: {
+    mouseMove(e) {
+        // 其他逻辑处理
+        eventBus.$emit(
+            VHTML_DRAGEAREA_DROPINFO_UPDATE,
+            {dropAreaId, dropItemId, insertType}
+        );
+    }，
+    updateDropInfo(val) {
+        if (this.allowDrop) {
+            let dropItemId = &#39;&#39;;
+            let insertType = INSERT_AFTER;
+            // 只有目标drop区域是当前dragarea的时候才更新
+            if (val.dropAreaId === this.areaId) {
+                dropItemId = val.dropItemId;
+                insertType = val.insertType;
+            }
+            this.dropItemId = dropItemId;
+            this.insertType = insertType;
+        }
+    }
+}，
+created() {
+    eventBus.$on(VHTML_DRAGEAREA_DROPINFO_UPDATE, this.updateDropInfo);
+},
+beforeDestroy() {
+    eventBus.$off(VHTML_DRAGEAREA_DROPINFO_UPDATE, this.updateDropInfo);
+}
+</code></pre>
+<p>每个<code>dragarea</code>中都会监听<code>eventBus</code>上的<code>VHTML_DRAGEAREA_DROPINFO_UPDATE</code>事件，同时会在<code>mousemove</code>回调中触发该事件，这样一来，每个<code>dragarea</code>的<code>dropInfo</code>状态都会同步到所有的<code>dragarea</code>中。对于每个<code>dragarea</code>，只有目标drop区域是当前<code>dragarea</code>的时候才更新<code>dropInfo</code>。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>跨区域拖拽组件从交互和实现角度来说，都可以说是基础组件中比较复杂的一种。一图胜千言，最后展示一下基于本文方案实现的拖拽组件demo：</p>
+<div style="text-align: center;"><img src="/assets/img/drag-demo.gif" alt="drag-demo"></div>
+        
+    
+
+    
+</div>
+
+
+                
+
+                <!-- Post Comments -->
+                
+            </div>
+
+            <!-- Post Prev & Next Nav -->
+            <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+    <!-- Prev Nav -->
+    
+        <a href="/2018/08/25/ts-jest/" id="post_nav-newer" class="prev-content">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_back</i>
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            Newer
+        </a>
+    
+
+    <!-- Section Spacer -->
+    <div class="section-spacer"></div>
+
+    <!-- Next Nav -->
+    
+        <a href="/2018/02/04/vue-provide-inject/" id="post_nav-older" class="next-content">
+            Older
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                <i class="material-icons">arrow_forward</i>
+            </button>
+        </a>
+    
+</nav>
+
+        </div>
+    </div>
+
+
+
+                    
+                        <!-- Overlay For Active Sidebar -->
+<div class="sidebar-overlay"></div>
+
+<!-- Material sidebar -->
+<aside id="sidebar" class="sidebar sidebar-colored sidebar-fixed-left" role="navigation">
+    <div id="sidebar-main">
+        <!-- Sidebar Header -->
+        <div class="sidebar-header header-cover" style="background-image: url(/assets/img/sidebar_header.png);">
+    <!-- Top bar -->
+    <div class="top-bar"></div>
+
+    <!-- Sidebar toggle button -->
+    <button type="button" class="sidebar-toggle mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" style="display: initial;" data-upgraded=",MaterialButton,MaterialRipple">
+        <i class="material-icons">clear_all</i>
+        <span class="mdl-button__ripple-container">
+            <span class="mdl-ripple">
+            </span>
+        </span>
+    </button>
+
+    <!-- Sidebar Avatar -->
+    <div class="sidebar-image">
+        <img src="/assets/img/avatar.png" alt="Hanks's avatar">
+    </div>
+
+    <!-- Sidebar Email -->
+    <a data-toggle="dropdown" class="sidebar-brand" href="#settings-dropdown">
+        hankszhang918@gmail.com
+        <b class="caret"></b>
+    </a>
+</div>
+
+
+        <!-- Sidebar Navigation  -->
+        <ul class="nav sidebar-nav">
+    <!-- User dropdown  -->
+    <li class="dropdown">
+        <ul id="settings-dropdown" class="dropdown-menu">
+            
+                <li>
+                    <a href="mailto: hankszhang918@gmail.com" target="_blank" title="Email Me">
+                        
+                            <i class="material-icons sidebar-material-icons sidebar-indent-left1pc-element">email</i>
+                        
+                        Email Me
+                    </a>
+                </li>
+            
+        </ul>
+    </li>
+
+    <!-- Homepage -->
+    
+        <li id="sidebar-first-li">
+            <a href="/">
+                
+                    <i class="material-icons sidebar-material-icons">home</i>
+                
+                Home
+            </a>
+        </li>
+        
+    
+
+    <!-- Archives  -->
+    
+
+    <!-- Categories  -->
+    
+        <li class="dropdown">
+            <a href="#" class="ripple-effect dropdown-toggle" data-toggle="dropdown">
+                
+                    <i class="material-icons sidebar-material-icons">chrome_reader_mode</i>
+                
+                Categories
+                <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu">
+                <li>
+                <a class="sidebar_archives-link" href="/categories/Development/">Development<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Experience/">Experience<span class="sidebar_archives-count">1</span></a></li><li><a class="sidebar_archives-link" href="/categories/Frontend/">Frontend<span class="sidebar_archives-count">9</span></a></li><li><a class="sidebar_archives-link" href="/categories/Rust/">Rust<span class="sidebar_archives-count">1</span></a>
+            </li></ul>
+        </li>
+        
+    
+
+    <!-- Pages  -->
+    
+
+    <!-- Article Number  -->
+    
+        <li>
+            <a href="/archives">
+                Number of articles
+                <span class="sidebar-badge">12</span>
+            </a>
+        </li>
+        
+    
+</ul>
+
+
+        <!-- Sidebar Footer -->
+        <!--
+I'm glad you use this theme, the development is no so easy, I hope you can keep the copyright, I will thank you so much.
+If you still want to delete the copyrights, could you still retain the first one? Which namely "Theme Material"
+It will not impact the appearance and can give developers a lot of support :)
+
+很高兴您使用并喜欢该主题，开发不易 十分谢谢与希望您可以保留一下版权声明。
+如果您仍然想删除的话 能否只保留第一项呢？即 "Theme Material"
+它不会影响美观并可以给开发者很大的支持和动力。 :)
+-->
+
+<!-- Sidebar Divider -->
+
+    <div class="sidebar-divider"></div>
+
+
+<!-- Theme Material -->
+
+
+<!-- Help & Support -->
+<!--
+
+    <a href="mailto:hiviosey@gmail.com" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.help
+        <span class="mdl-button__ripple-container">
+          <span class="mdl-ripple"></span>
+        </span>
+      </div>
+    </a>
+
+-->
+
+<!-- Feedback -->
+<!--
+
+    <a href="https://github.com/viosey/hexo-theme-material/issues" target="_blank" class="sidebar-footer-text-a">
+        <div class="sidebar-text mdl-button mdl-js-button mdl-js-ripple-effect sidebar-footer-text-div" data-upgraded=",MaterialButton,MaterialRipple">
+        sidebar.feedback
+        <span class="mdl-button__ripple-container"><span class="mdl-ripple"></span></span></div>
+    </a>
+
+-->
+
+<!-- About Theme -->
+<!--
+
+-->
+
+    </div>
+
+    <!-- Sidebar Image -->
+    
+
+</aside>
+
+                    
+
+                    
+                        <!-- Footer Top Button -->
+                        <div id="back-to-top" class="toTop-wrap">
+    <a href="#top" class="toTop">
+        <i class="material-icons footer_top-i">expand_less</i>
+    </a>
+</div>
+
+                    
+
+                    <!--Footer-->
+<footer class="mdl-mini-footer" id="bottom">
+    
+        <!-- Paradox Footer Left Section -->
+        <div class="mdl-mini-footer--left-section sns-list">
+    <!-- Twitter -->
+    
+
+    <!-- Facebook -->
+    
+
+    <!-- Google + -->
+    
+
+    <!-- Weibo -->
+    
+
+    <!-- Instagram -->
+    
+
+    <!-- Tumblr -->
+    
+
+    <!-- Github -->
+    
+        <a href="https://github.com/Hankszhang" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-github">
+                <span class="visuallyhidden">Github</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- LinkedIn -->
+    
+
+    <!-- Zhihu -->
+    
+        <a href="https://www.zhihu.com/people/hanks-zhang-8" target="_blank">
+            <button class="mdl-mini-footer--social-btn social-btn footer-sns-zhihu">
+                <span class="visuallyhidden">Zhihu</span>
+            </button><!--
+     --></a>
+    
+
+    <!-- Bilibili -->
+    
+
+    <!-- Telegram -->
+    
+    
+    <!-- V2EX -->
+    
+</div>
+
+
+        <!--Copyright-->
+        <div id="copyright">
+            Copyright&nbsp;©<script type="text/javascript">var fd = new Date();document.write("&nbsp;" + fd.getFullYear() + "&nbsp;");</script>Hanks' blog
+            
+        </div>
+
+        <!-- Paradox Footer Right Section -->
+
+        <!--
+        I am glad you use this theme, the development is no so easy, I hope you can keep the copyright.
+        It will not impact the appearance and can give developers a lot of support :)
+
+        很高兴您使用该主题，开发不易，希望您可以保留一下版权声明。
+        它不会影响美观并可以给开发者很大的支持。 :)
+        -->
+
+        <div class="mdl-mini-footer--right-section">
+            <div>
+                <div class="footer-develop-div">Powered by <a href="https://hexo.io" target="_blank" class="footer-develop-a">Hexo</a></div>
+                <div class="footer-develop-div">Theme - <a href="https://github.com/viosey/hexo-theme-material" target="_blank" class="footer-develop-a">Material</a></div>
+            </div>
+        </div>
+    
+</footer>
+
+
+                    <!-- Import JS File -->
+
+    <script>lsloader.load("lazyload_js","/js/lazyload.min.js?wgjW/HuQG9JDgvPDPoRAng==", true)</script>
+
+
+
+    <script>lsloader.load("js_js","/js/js.min.js?V/53wGualMuiPM3xoetD5Q==", true)</script>
+
+
+
+    <script>lsloader.load("np_js","/js/nprogress.js?pl3Qhb9lvqR1FlyLUna1Yw==", true)</script>
+
+
+<script type="text/ls-javascript" id="NProgress-script">
+    NProgress.configure({
+        showSpinner: true
+    });
+    NProgress.start();
+    $('#nprogress .bar').css({
+        'background': '#29d'
+    });
+    $('#nprogress .peg').css({
+        'box-shadow': '0 0 10px #29d, 0 0 15px #29d'
+    });
+    $('#nprogress .spinner-icon').css({
+        'border-top-color': '#29d',
+        'border-left-color': '#29d'
+    });
+    setTimeout(function() {
+        NProgress.done();
+        $('.fade').removeClass('out');
+    }, 800);
+</script>
+
+
+
+    
+        <script>lsloader.load("sm_js","/js/smoothscroll.js?tNQK2Tw2SUL8a1Scn/Mgew==", true)</script>
+    
+
+
+
+
+
+    <!-- Busuanzi -->
+    <script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+
+
+<!-- UC Browser Compatible -->
+<script>
+	var agent = navigator.userAgent.toLowerCase();
+	if(agent.indexOf('ucbrowser')>0) {
+		document.write('<link rel="stylesheet" href="/css/uc.css">');
+	   alert('由于 UC 浏览器使用极旧的内核，而本网站使用了一些新的特性。\n为了您能更好的浏览，推荐使用 Chrome 或 Firefox 浏览器。');
+	}
+</script>
+
+<!-- Import prettify js  -->
+
+    
+        
+            <script>lsloader.load("prettify_js","/js/prettify.min.js?WN07fivHQSMKWy7BmHBB6w==", true)</script>
+        
+    
+
+
+
+<!-- Window Load -->
+<!-- add class for prettify -->
+<script type="text/ls-javascript" id="window-load">
+    $(window).on('load', function() {
+        // Post_Toc parent position fixed
+        $('.post-toc-wrap').parent('.mdl-menu__container').css('position', 'fixed');
+    });
+
+    
+        
+            $(function() {
+                $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+                prettyPrint();
+                })
+        
+    
+    
+</script>
+
+<!-- MathJax Load-->
+
+
+<!-- Bing Background -->
+
+
+<script type="text/ls-javascript" id="lazy-load">
+    // Offer LazyLoad
+    queue.offer(function(){
+        $('.lazy').lazyload({
+            effect : 'show'
+        });
+    });
+
+    // Start Queue
+    $(document).ready(function(){
+        setInterval(function(){
+            queue.execNext();
+        },200);
+    });
+</script>
+
+<!-- Custom Footer -->
+
+
+
+<script>
+    (function(){
+        var scriptList = document.querySelectorAll('script[type="text/ls-javascript"]')
+
+        for (var i = 0; i < scriptList.length; ++i) {
+            var item = scriptList[i];
+            lsloader.runInlineScript(item.id,item.id);
+        }
+    })()
+console.log('\n %c © Material Theme | Version: 1.5.2 | https://github.com/viosey/hexo-theme-material %c \n', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-left-radius:5px;border-bottom-left-radius:5px;', 'color:#455a64;background:#e0e0e0;padding:5px 0;border-top-right-radius:5px;border-bottom-right-radius:5px;');
+</script>
+
+                </main>
+            </div>
+        </body>
+    
+</html>
